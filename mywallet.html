@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutiply - My Wallet</title>
+    <link rel="stylesheet" href="walletstyle.css">
+</head>
+<body>
+    
+    <div class="loader-overlay" id="loader">
+    <div class="loader-circle-50"></div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <h2>Plutiply</h2>
+                <p>Your Reliable Digital Transaction Partner</p>
+            </div>
+
+            <nav>
+                <div class="menu-section">
+                    <a href="dashboard.html" class="menu-item">
+                        <span class="icon">🏠</span>
+                        <span class="text">Dashboard</span>
+                    </a>
+                    <a href="mywallet.html" class="menu-item active">
+                        <span class="icon">💰</span>
+                        <span class="text">My Wallet</span>
+                    </a>
+                    <a href="airtime.html" class="menu-item">
+                        <span class="icon">📱</span>
+                        <span class="text">Buy Airtime</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📊</span>
+                        <span class="text">Buy Data</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📺</span>
+                        <span class="text">Cable TV</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">⚡</span>
+                        <span class="text">Electricity</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">🎓</span>
+                        <span class="text">Exam Vouchers</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Analytics</h3>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📈</span>
+                        <span class="text">Statistics</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">🎁</span>
+                        <span class="text">Referrals</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Support</h3>
+                    <a href="#" class="menu-item">
+                        <span class="icon">💬</span>
+                        <span class="text">Support</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Settings</span>
+                    </a>
+                    
+                </div>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">SO</div>
+                <div class="user-info">
+                    <h4>Stanley Owusu</h4>
+                    <p>User</p>
+                </div>
+            </div>
+            <div class="menu-section">
+                            <h3>Log-Out</h3>
+                            <a href="main.html" class="menu-item">
+                                <span>🚪</span>
+                                <span>Log-Out</span>
+                            </a>
+
+                        </div>
+
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-actions">
+                    <button class="hamburger" id="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <div class="page-title">
+                    <h1>My Wallet</h1>
+                    <p>Manage your funds and transactions</p>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn notification-btn">🔔</button>
+                </div>
+            </header>
+
+            <!-- Wallet Balance Card -->
+            <div class="balance-card">
+                <div class="balance-content">
+                    <div class="balance-label">Total Balance</div>
+                    <div class="balance-amount">
+                        <span id="balanceDisplay">₵54,812.00</span>
+                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                    </div>
+                    <div class="wallet-actions">
+                        <button class="wallet-btn primary" onclick="openFundModal()">
+                            ➕ Fund Wallet
+                        </button>
+                        <button class="wallet-btn" onclick="openWithdrawModal()">
+                            ⬇️ Withdraw
+                        </button>
+                        <button class="wallet-btn">
+                            📊 Statement
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="action-card">
+                    <div class="action-icon">📱</div>
+                    <h3>Buy Airtime</h3>
+                    <p>Quick airtime purchase</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">📊</div>
+                    <h3>Buy Data</h3>
+                    <p>Purchase data bundles</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">↔️</div>
+                    <h3>Transfer Money</h3>
+                    <p>Send to other users</p>
+                </div>
+                <div class="action-card">
+                    <div class="action-icon">💳</div>
+                    <h3>Pay Bills</h3>
+                    <p>Electricity, Cable TV, Water Bill</p>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="transaction-section">
+                <div class="section-header">
+                    <h2>Recent Transactions</h2>
+                    <button class="icon-btn">⋯</button>
+                </div>
+
+                <div class="transaction-filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Credit</button>
+                    <button class="filter-btn">Debit</button>
+                    <button class="filter-btn">Pending</button>
+                </div>
+
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="transaction-icon credit">⬇️</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Wallet Funded</div>
+                            <div class="transaction-meta">Jan 20, 2026 • 14:35 PM • Paystack</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount credit">+₵5,000.00</div>
+                            <span class="transaction-status status-completed">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-icon debit">📱</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">MTN Airtime Purchase</div>
+                            <div class="transaction-meta">Jan 20, 2026 • 12:20 PM • 0241234567</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount debit">-₵50.00</div>
+                            <span class="transaction-status status-completed">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-icon debit">📊</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">AirtelTigo Data Bundle</div>
+                            <div class="transaction-meta">Jan 19, 2026 • 18:45 PM • 5GB Bundle</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount debit">-₵35.00</div>
+                            <span class="transaction-status status-completed">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-icon debit">👤</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Transfer to John Mensah</div>
+                            <div class="transaction-meta">Jan 19, 2026 • 10:15 AM • P2P Transfer</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount debit">-₵500.00</div>
+                            <span class="transaction-status status-completed">Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-icon debit">⚡</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Electricity Bill Payment</div>
+                            <div class="transaction-meta">Jan 18, 2026 • 16:30 PM • ECG</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount debit">-₵150.00</div>
+                            <span class="transaction-status status-pending">Pending</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="transaction-icon credit">🎁</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Referral Bonus</div>
+                            <div class="transaction-meta">Jan 18, 2026 • 09:00 AM • From Ama Osei</div>
+                        </div>
+                        <div>
+                            <div class="transaction-amount credit">+₵20.00</div>
+                            <span class="transaction-status status-completed">Completed</span>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </main>
+    </div>
+                <!-- Fund Wallet Modal -->
+                <div class="modal" id="fundModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Fund Wallet</h2>
+                            <button class="close-modal" onclick="closeFundModal()">×</button>
+                        </div>
+
+                        <div class="payment-section" style="padding: 0; background: transparent;">
+                            <h3 style="margin-bottom: 20px; font-size: 16px;">Select Payment Method</h3>
+                            <div class="payment-methods">
+                                <div class="payment-method selected" onclick="selectPaymentMethod(this)">
+                                    <div class="method-header">
+                                        <div class="method-icon">💳</div>
+                                        <div class="method-info">
+                                            <h4>Debit/Credit Card</h4>
+                                            <p>Paystack</p>
+                                        </div>
+                                    </div>
+                                    <div class="method-details">Instant funding • All cards accepted</div>
+                                </div>
+
+                                <div class="payment-method" onclick="selectPaymentMethod(this)">
+                                    <div class="method-header">
+                                        <div class="method-icon">📱</div>
+                                        <div class="method-info">
+                                            <h4>Mobile Money</h4>
+                                            <p>MTN, Vodafone, AirtelTigo</p>
+                                        </div>
+                                    </div>
+                                    <div class="method-details">Instant funding • All networks</div>
+                                </div>
+
+
+                                </div>
+
+                                <div class="fund-form">
+                                    <div class="form-group">
+                                        <label>Amount (₵)</label>
+                                        <input type="number" placeholder="Enter amount" min="10" id="fundAmount">
+                                    </div>
+
+                                    <div class="form-group" id="cardFields">
+                                        <label>Card Number</label>
+                                        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19">
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="cardExtraFields">
+                                        <div class="form-group">
+                                            <label>Expiry Date</label>
+                                            <input type="text" placeholder="MM/YY" maxlength="5">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>CVV</label>
+                                            <input type="text" placeholder="123" maxlength="3">
+                                        </div>
+                                    </div>
+
+                                    <button class="submit-btn" onclick="processFunding()">Fund Wallet</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                           <!-- Withdraw Modal -->
+                    <div class="modal" id="withdrawModal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2>Withdraw Funds</h2>
+                                <button class="close-modal" onclick="closeWithdrawModal()">×</button>
+                            </div>
+
+                            <div class="fund-form" style="margin-top: 0;">
+                                <div class="form-group">
+                                    <label>Available Balance</label>
+                                    <input type="text" value="₵54,812.00" disabled>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Withdrawal Amount (₵)</label>
+                                    <input type="number" placeholder="Enter amount" min="50">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Withdrawal Method</label>
+                                    <select>
+                                        <option>Bank Transfer</option>
+                                        <option>Mobile Money</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Account Number</label>
+                                    <input type="text" placeholder="Enter account/mobile number">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Account Name</label>
+                                    <input type="text" placeholder="Beneficiary name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Bank/Network</label>
+                                    <select>
+                                        <option>Select Bank/Network</option>
+                                        <option>MTN Mobile Money</option>
+                                        <option>Vodafone Cash</option>
+                                        <option>AirtelTigo Money</option>
+                                        <option>Access Bank</option>
+                                        <option>Ecobank</option>
+                                        <option>GCB Bank</option>
+                                        <option>Stanbic Bank</option>
+                                    </select>
+                                </div>
+
+                                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">
+                                    ⚠️ Processing time: We will test it and put an average there!
+                                </p>
+
+                                <button class="submit-btn" onclick="processWithdrawal()">Request Withdrawal</button>
+                            </div>
+                        </div>
+                    </div>  
+                       
+   <script src="walletjs.js"></script>
+       
+</body>
+</html> 
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Maybe Later -->
+
+
+
+
+                                    <!-- <div class="payment-method" onclick="selectPaymentMethod(this)">
+                                        <div class="method-header">
+                                            <div class="method-icon">🏦</div>
+                                            <div class="method-info">
+                                                <h4>Bank Transfer</h4>
+                                                <p>Manual verification</p>
+                                            </div>
+                                        </div>
+                                        <div class="method-details">Processing: 5-30 minutes</div>
+                                    </div> -->
