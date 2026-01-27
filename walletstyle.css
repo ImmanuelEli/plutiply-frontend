@@ -251,9 +251,14 @@
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Changed from space-between */
             align-items: center;
             margin-bottom: 35px;
+            position: relative; /* Add this */
+        }
+
+        .page-title {
+            text-align: center; /* Add this */
         }
 
         .page-title h1 {
@@ -270,7 +275,8 @@
             display: flex;
             gap: 15px;
             align-items: center;
-            flex-wrap: wrap;
+            position: absolute; /* Add this */
+            right: 0; /* Add this - positions actions on the right */
         }
 
         .icon-btn {
@@ -785,16 +791,33 @@
                 padding: 20px 15px;
             }
 
+            
             .header {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center; /* Changed from flex-start */
                 gap: 15px;
+                position: relative;
             }
 
             .header-actions {
+                position: static; /* Reset absolute positioning */
                 width: 100%;
                 justify-content: space-between;
             }
+
+            .page-title {
+                text-align: center;
+                width: 100%; /* Add this */
+            }
+            
+            .page-title h1 {
+                font-size: 25px;
+            }
+            
+            .page-title p {
+                font-size: 14px;
+            }
+
 
             .balance-card {
                 padding: 30px 20px;
