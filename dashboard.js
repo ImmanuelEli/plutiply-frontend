@@ -34,47 +34,11 @@ function showAlert(message, type = 'success', duration = 5000) {
 const notifications = [
     {
         id: 1,
-        icon: '💰',
-        title: 'Payment Received',
-        message: 'You received ₵500.00 from Ama Osei',
-        time: '5 min ago',
+        icon: '💸',
+        title: 'Welcome To Plutiply!',
+        message: 'Your Relaible Transaction Partner',
+        time: 'now',
         read: false,
-        type: 'success'
-    },
-    {
-        id: 2,
-        icon: '📱',
-        title: 'Airtime Purchase',
-        message: 'Your ₵50 MTN airtime has been delivered',
-        time: '1 hour ago',
-        read: false,
-        type: 'info'
-    },
-    {
-        id: 3,
-        icon: '⚠️',
-        title: 'Low Balance Alert',
-        message: 'Your wallet balance is below ₵10,000',
-        time: '2 hours ago',
-        read: false,
-        type: 'warning'
-    },
-    {
-        id: 4,
-        icon: '🎁',
-        title: 'Referral Bonus',
-        message: 'You earned ₵20 from a referral!',
-        time: '1 day ago',
-        read: true,
-        type: 'success'
-    },
-    {
-        id: 5,
-        icon: '📊',
-        title: 'Monthly Report',
-        message: 'Your monthly spending report is ready',
-        time: '2 days ago',
-        read: true,
         type: 'info'
     }
 ];
@@ -124,7 +88,7 @@ function createNotificationPanel() {
     notificationHTML += `
         </div>
         <div class="notification-footer">
-            <a href="#" class="view-all-link">View All Notifications</a>
+            <a href="#transactionHistory" class="view-all-link" onclick="scrollToTransactions(event)">View All Notifications</a>
         </div>
     `;
     
@@ -368,8 +332,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const balanceText = walletBalance.textContent.replace(/[₵,]/g, '');
         const balance = parseFloat(balanceText);
         
-        // Show low balance warning if balance is below 2 cedis
-        if (balance < 2) {
+        // Show low balance warning if balance is below 1 cedi
+        if (balance < 1) {
             setTimeout(() => {
                 showAlert('⚠️ Your wallet balance is running low. Consider topping up!', 'warning', 6000);
             }, 8000); // Show after 8 seconds
@@ -517,8 +481,8 @@ function saveGoal() {
         return;
     }
     
-    // Here you would typically save to your backend/database
-    // For now, we'll update the UI
+    // Spending goal is for the backend database so keep that in mind and add a section for that.
+    // For now, I'll just add it to the frontend
     
     const spendingGoalCard = document.querySelectorAll('.stat-card')[2];
     if (spendingGoalCard) {
@@ -574,7 +538,46 @@ function hideCediLoader() {
     }
 }
 
-// Optional: Add spinning effect to cedi loader
+function scrollToTransactions(event) {
+       event.preventDefault();
+       const transactionCard = document.getElementById('transactionHistory');
+       if (transactionCard) {
+           transactionCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+           // Close notification panel
+           const panel = document.getElementById('notificationPanel');
+           if (panel) {
+               panel.classList.remove('active');
+               setTimeout(() => panel.remove(), 300);
+           }
+       }
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Update for later
+
+// Add spinning effect to cedi loader
 // Uncomment the line below if you want the spinning animation instead of pulsing
 // document.querySelector('.cedi-loader')?.classList.add('spinning');
 
