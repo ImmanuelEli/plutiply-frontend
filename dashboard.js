@@ -290,8 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (sendBtn) {
         sendBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            const accountInput = document.querySelector('.transfer-form input[type="text"]');
-            const amountInput = document.querySelector('.transfer-form input[type="number"]');
+            const accountInput = document.getElementById('accountInput');
+            const amountInput = document.getElementById('amountInput');
             
             if (accountInput && amountInput) {
                 const account = accountInput.value.trim();
@@ -302,24 +302,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (parseFloat(amount) <= 0) {
                     showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
                 } else {
-                    showAlert(`✅ Transfer of ₵${amount} initiated successfully!`, 'success', 5000);
+                    // Show cedi loader
+                    showCediLoader();
                     
-                    // Add notification for successful transfer
-                    notifications.unshift({
-                        id: Date.now(),
-                        icon: '💸',
-                        title: 'Transfer Sent',
-                        message: `₵${amount} sent to ${account}`,
-                        time: 'Just now',
-                        read: false,
-                        type: 'success'
-                    });
-                    
-                    updateNotificationBadge();
-                    
-                    // Clear inputs
-                    accountInput.value = '';
-                    amountInput.value = '';
+                    // Simulate transfer processing (replace with actual API call)
+                    setTimeout(() => {
+                        hideCediLoader();
+                        
+                        showAlert(`✅ Transfer of ₵${amount} initiated successfully!`, 'success', 5000);
+                        
+                        // Add notification for successful transfer
+                        notifications.unshift({
+                            id: Date.now(),
+                            icon: '💸',
+                            title: 'Transfer Sent',
+                            message: `₵${amount} sent to ${account}`,
+                            time: 'Just now',
+                            read: false,
+                            type: 'success'
+                        });
+                        
+                        updateNotificationBadge();
+                        
+                        // Clear inputs
+                        accountInput.value = '';
+                        amountInput.value = '';
+                        document.getElementById('beneficiaryName').value = '';
+                    }, 2000); // 2 second loader (adjust as needed)
                 }
             }
         });
@@ -330,10 +339,12 @@ document.addEventListener('DOMContentLoaded', function() {
     contactAvatars.forEach(avatar => {
         avatar.addEventListener('click', function() {
             const name = this.getAttribute('title');
-            const accountInput = document.querySelector('.transfer-form input[type="text"]');
-            if (accountInput && name) {
+            const accountInput = document.getElementById('accountInput');
+            const beneficiaryInput = document.getElementById('beneficiaryName');
+            if (accountInput && beneficiaryInput && name) {
                 // Simulate filling in contact info
                 accountInput.value = name;
+                beneficiaryInput.value = name;
                 showAlert(`📱 ${name} selected for quick transfer`, 'info', 3000);
             }
         });
@@ -375,4 +386,195 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 12000); // Show after 12 seconds
         }
     }
+
+    // Account input listener for beneficiary name lookup (placeholder for API)
+    const accountInput = document.getElementById('accountInput');
+    const beneficiaryInput = document.getElementById('beneficiaryName');
+    
+    if (accountInput && beneficiaryInput) {
+        accountInput.addEventListener('input', function() {
+            const value = this.value.trim();
+            
+            // Clear beneficiary name if account input is cleared
+            if (!value) {
+                beneficiaryInput.value = '';
+                return;
+            }
+            
+            // Placeholder for API integration
+            // In the future, this will call your MoMo/Bank API to fetch the account name
+            // For now, show a placeholder message after a delay to simulate API call
+            
+            if (value.length >= 10) {
+                // Simulate API delay
+                beneficiaryInput.value = 'Looking up...';
+                
+                setTimeout(() => {
+                    // This is where you'll integrate your API call
+                    // Example: fetchAccountName(value).then(name => beneficiaryInput.value = name);
+                    beneficiaryInput.value = 'API Integration Pending';
+                }, 500);
+            }
+        });
+    }
 });
+
+// ========================================
+// ADD RECIPIENT MODAL FUNCTIONS
+// ========================================
+function openAddRecipientModal() {
+    const modal = document.getElementById('addRecipientModal');
+    if (modal) {
+        modal.classList.add('active');
+        
+        // Clear form
+        document.getElementById('recipientName').value = '';
+        document.getElementById('recipientAccount').value = '';
+        document.getElementById('recipientType').value = '';
+    }
+}
+
+function closeAddRecipientModal() {
+    const modal = document.getElementById('addRecipientModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function saveRecipient() {
+    const name = document.getElementById('recipientName').value.trim();
+    const account = document.getElementById('recipientAccount').value.trim();
+    const type = document.getElementById('recipientType').value;
+    
+    if (!name || !account || !type) {
+        showAlert('⚠️ Please fill in all fields', 'warning', 4000);
+        return;
+    }
+    
+    // Here you would typically save to your backend/database
+    // For now, we'll just show a success message and add to recent contacts
+    
+    // Create new contact avatar
+    const contactsContainer = document.querySelector('.recent-contacts');
+    const initials = name.split(' ').map(word => word[0]).join('').substring(0, 2).toUpperCase();
+    
+    const newContact = document.createElement('div');
+    newContact.className = 'contact-avatar';
+    newContact.setAttribute('title', name);
+    newContact.textContent = initials;
+    
+    // Add click handler
+    newContact.addEventListener('click', function() {
+        const accountInput = document.getElementById('accountInput');
+        const beneficiaryInput = document.getElementById('beneficiaryName');
+        if (accountInput && beneficiaryInput) {
+            accountInput.value = account;
+            beneficiaryInput.value = name;
+            showAlert(`📱 ${name} selected for quick transfer`, 'info', 3000);
+        }
+    });
+    
+    // Add to contacts (limit to 5 visible contacts)
+    if (contactsContainer.children.length >= 5) {
+        contactsContainer.removeChild(contactsContainer.lastChild);
+    }
+    contactsContainer.insertBefore(newContact, contactsContainer.firstChild);
+    
+    showAlert(`✅ ${name} added to recipients!`, 'success', 4000);
+    closeAddRecipientModal();
+}
+
+// ========================================
+// SET GOAL MODAL FUNCTIONS
+// ========================================
+function openSetGoalModal() {
+    const modal = document.getElementById('setGoalModal');
+    if (modal) {
+        modal.classList.add('active');
+        
+        // Pre-fill with current goal if available
+        const currentGoal = document.querySelectorAll('.stat-card')[2];
+        if (currentGoal) {
+            const goalValue = currentGoal.querySelector('.stat-value').textContent.replace(/[₵,]/g, '');
+            document.getElementById('goalAmount').value = goalValue;
+        }
+    }
+}
+
+function closeSetGoalModal() {
+    const modal = document.getElementById('setGoalModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function saveGoal() {
+    const amount = document.getElementById('goalAmount').value.trim();
+    const period = document.getElementById('goalPeriod').value;
+    
+    if (!amount || parseFloat(amount) <= 0) {
+        showAlert('⚠️ Please enter a valid goal amount', 'warning', 4000);
+        return;
+    }
+    
+    // Here you would typically save to your backend/database
+    // For now, we'll update the UI
+    
+    const spendingGoalCard = document.querySelectorAll('.stat-card')[2];
+    if (spendingGoalCard) {
+        const goalValue = spendingGoalCard.querySelector('.stat-value');
+        goalValue.textContent = `₵${parseFloat(amount).toLocaleString()}`;
+    }
+    
+    const periodText = period === 'monthly' ? 'Monthly' : period === 'weekly' ? 'Weekly' : 'Daily';
+    showAlert(`✅ ${periodText} spending goal set to ₵${parseFloat(amount).toLocaleString()}!`, 'success', 5000);
+    
+    // Add notification
+    notifications.unshift({
+        id: Date.now(),
+        icon: '🎯',
+        title: 'Goal Updated',
+        message: `${periodText} spending goal set to ₵${parseFloat(amount).toLocaleString()}`,
+        time: 'Just now',
+        read: false,
+        type: 'info'
+    });
+    
+    updateNotificationBadge();
+    closeSetGoalModal();
+}
+
+// Close modals when clicking outside
+window.addEventListener('click', function(e) {
+    const addRecipientModal = document.getElementById('addRecipientModal');
+    const setGoalModal = document.getElementById('setGoalModal');
+    
+    if (e.target === addRecipientModal) {
+        closeAddRecipientModal();
+    }
+    if (e.target === setGoalModal) {
+        closeSetGoalModal();
+    }
+});
+
+// ========================================
+// CEDI LOADER FUNCTIONS
+// ========================================
+function showCediLoader() {
+    const loader = document.getElementById('cediLoader');
+    if (loader) {
+        loader.classList.add('active');
+    }
+}
+
+function hideCediLoader() {
+    const loader = document.getElementById('cediLoader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
+}
+
+// Optional: Add spinning effect to cedi loader
+// Uncomment the line below if you want the spinning animation instead of pulsing
+// document.querySelector('.cedi-loader')?.classList.add('spinning');
+
