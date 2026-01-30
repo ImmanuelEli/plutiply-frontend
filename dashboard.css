@@ -471,8 +471,42 @@ body {
 
 .quick-transfer h3 {
     font-size: 18px;
+    margin-bottom: 0;
+}
+
+.quick-transfer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
 }
+
+.add-recipient-btn {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.add-recipient-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+}
+
+.add-recipient-btn span {
+    line-height: 1;
+}
+
 
 .recent-contacts {
     display: flex;
@@ -518,6 +552,30 @@ body {
 .form-input::placeholder {
     color: #666;
 }
+
+.form-input:read-only {
+    background: rgba(10, 14, 39, 0.4);
+    border-color: rgba(76, 175, 80, 0.1);
+    cursor: not-allowed;
+    color: #888;
+}
+
+.set-goal-btn {
+    background: rgba(76, 175, 80, 0.15);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    color: #4CAF50;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.set-goal-btn:hover {
+    background: rgba(76, 175, 80, 0.25);
+    transform: scale(1.05);
+}
+
 
 .send-btn {
     background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
@@ -1229,3 +1287,283 @@ body {
         max-height: 80vh;
     }
 }
+
+/* ========================================
+   MODAL STYLES
+   ======================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10002;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: #1a1f3a;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px;
+    border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #fff;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 32px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.modal-input {
+    width: 100%;
+    background: rgba(10, 14, 39, 0.6);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    padding: 14px;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.modal-input::placeholder {
+    color: #666;
+}
+
+.goal-info {
+    background: rgba(76, 175, 80, 0.1);
+    border-left: 3px solid #4CAF50;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.goal-info p {
+    margin: 0;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 20px 25px;
+    border-top: 1px solid rgba(76, 175, 80, 0.1);
+    background: rgba(10, 14, 39, 0.3);
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-btn-cancel {
+    background: rgba(10, 14, 39, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+.modal-btn-cancel:hover {
+    background: rgba(244, 67, 54, 0.1);
+    border-color: #f44336;
+    color: #f44336;
+}
+
+.modal-btn-save {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.modal-btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+}
+
+/* Modal Mobile Responsiveness */
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        max-width: none;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 20px;
+    }
+
+    .modal-header h3 {
+        font-size: 18px;
+    }
+}
+
+/* ========================================
+   CEDI LOADER
+   ======================================== */
+.cedi-loader-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 39, 0.95);
+    z-index: 10003;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.cedi-loader-overlay.active {
+    display: flex;
+}
+
+.cedi-loader {
+    text-align: center;
+}
+
+.cedi-symbol {
+    font-size: 80px;
+    font-weight: bold;
+    color: #4CAF50;
+    animation: cediPulse 1.5s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(76, 175, 80, 0.5),
+                 0 0 40px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes cediPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+.loader-text {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #4CAF50;
+    font-weight: 500;
+    animation: textFade 1.5s ease-in-out infinite;
+}
+
+@keyframes textFade {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Alternative spinning cedi loader (you can choose which one you prefer) */
+.cedi-loader.spinning .cedi-symbol {
+    animation: cediSpin 2s linear infinite;
+}
+
+@keyframes cediSpin {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) scale(1.1);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+
