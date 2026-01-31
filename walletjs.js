@@ -1,156 +1,603 @@
  let balanceVisible = true;
-        const actualBalance = '₵54,812.00';
+ const actualBalance = '₵0.00';
 
-        // Toggle sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.getElementById('hamburger');
+// Toggle sidebar
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const hamburger = document.getElementById('hamburger');
+    
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+    hamburger.classList.toggle('active');
+}
+
+document.getElementById('hamburger').addEventListener('click', toggleSidebar);
+document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+
+// Close sidebar when menu item clicked on mobile
+if (window.innerWidth <= 768) {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', toggleSidebar);
+    });
+}
+
+// Toggle balance visibility
+function toggleBalance() {
+    const balanceDisplay = document.getElementById('balanceDisplay');
+    balanceVisible = !balanceVisible;
+    
+    if (balanceVisible) {
+        balanceDisplay.textContent = actualBalance;
+    } else {
+        balanceDisplay.textContent = '₵****.**';
+    }
+}
+
+// Fund Modal
+function openFundModal() {
+    document.getElementById('fundModal').classList.add('active');
+}
+
+function closeFundModal() {
+    document.getElementById('fundModal').classList.remove('active');
+}
+
+// Withdraw Modal
+function openWithdrawModal() {
+    document.getElementById('withdrawModal').classList.add('active');
+}
+
+function closeWithdrawModal() {
+    document.getElementById('withdrawModal').classList.remove('active');
+}
+
+// Select payment method
+function selectPaymentMethod(element) {
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.classList.remove('selected');
+    });
+    element.classList.add('selected');
+
+    // Show/hide fields based on selection
+    const methodName = element.querySelector('h4').textContent;
+    const cardFields = document.getElementById('cardFields');
+    const cardExtraFields = document.getElementById('cardExtraFields');
+    const phoneNumberField = document.getElementById('phoneNumberField');
+
+    if (methodName === 'Debit/Credit Card') {
+        cardFields.style.display = 'block';
+        cardExtraFields.style.display = 'grid';
+        phoneNumberField.style.display = 'none';
+    } else if (methodName === 'Mobile Money') {
+        cardFields.style.display = 'none';
+        cardExtraFields.style.display = 'none';
+        phoneNumberField.style.display = 'block';
+    } else {
+        cardFields.style.display = 'none';
+        cardExtraFields.style.display = 'none';
+        phoneNumberField.style.display = 'none';
+    }
+}
+
+// Process funding
+function processFunding() {
+    const amount = document.getElementById('fundAmount').value;
+    
+    if (!amount || amount < 5) {
+        showAlert('Please enter an amount of at least ₵5');
+        return;
+    }
+
+    showAlert(`Processing payment of ₵${amount}...\n\nThis will be connected to Paystack API in the backend.`);
+    closeFundModal();
+}
+
+// Process withdrawal
+function processWithdrawal() {
+
+    closeWithdrawModal();
+}
+
+// Filter transactions
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filter = this.textContent;
+        // Filter logic will be implemented with backend
+        console.log('Filtering by:', filter);
+    });
+});
+
+// Quick action cards
+document.querySelectorAll('.action-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const action = this.querySelector('h3').textContent;
+        showAlert(`Navigating to ${action} page...`);
+    });
+});
+
+// Close modals on outside click
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
+    });
+});
+
+// Menu item navigation
+document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+
+    //Loader functions
+const MIN_LOADER_TIME = 2000; // 2 cycles × 1s
+const startTime = Date.now();
+
+window.addEventListener("load", () => {
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, MIN_LOADER_TIME - elapsed);
+
+    setTimeout(hideLoader, remaining);
+});
+
+function hideLoader() {
+    const loader = document.getElementById("loader");
+    const dashboard = document.querySelector(".dashboard");
+
+    loader.classList.add("hidden");
+
+    setTimeout(() => {
+        loader.style.display = "none";
+        dashboard.style.display = "flex";
+        dashboard.style.opacity = "1";
+        
+        // Update notification badge
+        updateNotificationBadge();
+        
+        // Add notification button click handler
+        const notificationBtn = document.querySelector('.notification-btn');
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', toggleNotificationPanel);
+        }
+    }, 600); // matches fade-out transition
+}
+
+// ========================================
+// ALERT SYSTEM
+// ========================================
+function showAlert(message, type = 'success', duration = 5000) {
+    let container = document.getElementById('alertContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'alertContainer';
+        document.body.appendChild(container);
+    }
+
+    const alert = document.createElement('div');
+    alert.className = `alert ${type}`;
+    alert.innerHTML = `
+        ${message}
+        <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+    `;
+
+    container.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 600);
+    }, duration);
+}
+
+// ========================================
+// NOTIFICATION SYSTEM
+// ========================================
+const notifications = [
+    {
+        id: 1,
+        icon: '💸',
+        title: 'Welcome To Plutiply!',
+        message: 'Your Reliable Digital Transaction Partner',
+        time: 'now',
+        read: false,
+        type: 'info'
+    }
+];
+
+function createNotificationPanel() {
+    const panel = document.createElement('div');
+    panel.id = 'notificationPanel';
+    panel.className = 'notification-panel';
+    
+    const unreadCount = notifications.filter(n => !n.read).length;
+    
+    let notificationHTML = `
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <span class="notification-count">${unreadCount} New</span>
+        </div>
+        <div class="notification-actions">
+            <button class="notification-action-btn" onclick="markAllAsRead()">Mark all as read</button>
+            <button class="notification-action-btn" onclick="clearAllNotifications()">Clear all</button>
+        </div>
+        <div class="notification-list">
+    `;
+    
+    if (notifications.length === 0) {
+        notificationHTML += `
+            <div class="notification-empty">
+                <span style="font-size: 48px;">🔔</span>
+                <p>No notifications yet</p>
+            </div>
+        `;
+    } else {
+        notifications.forEach(notif => {
+            notificationHTML += `
+                <div class="notification-item ${notif.read ? 'read' : 'unread'}" data-id="${notif.id}">
+                    <div class="notification-icon ${notif.type}">${notif.icon}</div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notif.title}</div>
+                        <div class="notification-message">${notif.message}</div>
+                        <div class="notification-time">${notif.time}</div>
+                    </div>
+                    <button class="notification-close" onclick="removeNotification(${notif.id})">×</button>
+                </div>
+            `;
+        });
+    }
+    
+    notificationHTML += `
+        </div>
+        <div class="notification-footer">
+            <a href="#" class="view-all-link" onclick="closeNotificationPanel(event)">Close</a>
+        </div>
+    `;
+    
+    panel.innerHTML = notificationHTML;
+    return panel;
+}
+
+function toggleNotificationPanel() {
+    let panel = document.getElementById('notificationPanel');
+    
+    if (panel) {
+        // Close panel
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+    } else {
+        // Open panel
+        panel = createNotificationPanel();
+        document.body.appendChild(panel);
+        
+        // Position panel near notification button
+        const notifBtn = document.querySelector('.notification-btn');
+        if (notifBtn) {
+            const rect = notifBtn.getBoundingClientRect();
+            panel.style.top = rect.bottom + 10 + 'px';
+            panel.style.right = window.innerWidth - rect.right + 'px';
+        }
+        
+        // Trigger animation
+        setTimeout(() => panel.classList.add('active'), 10);
+        
+        // Close when clicking outside
+        setTimeout(() => {
+            document.addEventListener('click', closeOnClickOutside);
+        }, 100);
+    }
+    
+    updateNotificationBadge();
+}
+
+function closeOnClickOutside(e) {
+    const panel = document.getElementById('notificationPanel');
+    const notifBtn = document.querySelector('.notification-btn');
+    
+    if (panel && !panel.contains(e.target) && !notifBtn.contains(e.target)) {
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+        document.removeEventListener('click', closeOnClickOutside);
+    }
+}
+
+function closeNotificationPanel(event) {
+    if (event) event.preventDefault();
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+        document.removeEventListener('click', closeOnClickOutside);
+    }
+}
+
+function markAllAsRead() {
+    notifications.forEach(n => n.read = true);
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.remove();
+        toggleNotificationPanel();
+    }
+    showAlert('✓ All notifications marked as read', 'success', 3000);
+}
+
+function clearAllNotifications() {
+    notifications.length = 0;
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.remove();
+        toggleNotificationPanel();
+    }
+    showAlert('✓ All notifications cleared', 'success', 3000);
+}
+
+function removeNotification(id) {
+    const index = notifications.findIndex(n => n.id === id);
+    if (index > -1) {
+        notifications.splice(index, 1);
+        const panel = document.getElementById('notificationPanel');
+        if (panel) {
+            panel.remove();
+            toggleNotificationPanel();
+        }
+    }
+}
+
+function updateNotificationBadge() {
+    const notifBtn = document.querySelector('.notification-btn');
+    const unreadCount = notifications.filter(n => !n.read).length;
+    
+    // Add or remove has-notifications class
+    if (unreadCount > 0 && notifBtn) {
+        notifBtn.classList.add('has-notifications');
+    } else if (notifBtn) {
+        notifBtn.classList.remove('has-notifications');
+    }
+}
+
+// ========================================
+// TRANSFER MODAL FUNCTIONS
+// ========================================
+let selectedTransferType = null;
+
+function openTransferModal() {
+    document.getElementById('transferModal').classList.add('active');
+    // Reset form
+    resetTransferForm();
+}
+
+function closeTransferModal() {
+    document.getElementById('transferModal').classList.remove('active');
+    resetTransferForm();
+}
+
+function selectTransferType(type) {
+    selectedTransferType = type;
+    
+    // Update UI
+    document.querySelectorAll('.transfer-type').forEach(el => {
+        el.classList.remove('selected');
+    });
+    event.target.closest('.transfer-type').classList.add('selected');
+    
+    // Hide all fields first
+    document.getElementById('bankFields').style.display = 'none';
+    document.getElementById('momoFields').style.display = 'none';
+    document.getElementById('p2pFields').style.display = 'none';
+    
+    // Show relevant fields
+    if (type === 'bank') {
+        document.getElementById('bankFields').style.display = 'block';
+    } else if (type === 'momo') {
+        document.getElementById('momoFields').style.display = 'block';
+    } else if (type === 'p2p') {
+        document.getElementById('p2pFields').style.display = 'block';
+    }
+    
+    // Show common fields
+    document.getElementById('amountField').style.display = 'block';
+    document.getElementById('descriptionField').style.display = 'block';
+}
+
+function resetTransferForm() {
+    selectedTransferType = null;
+    document.querySelectorAll('.transfer-type').forEach(el => {
+        el.classList.remove('selected');
+    });
+    document.getElementById('bankFields').style.display = 'none';
+    document.getElementById('momoFields').style.display = 'none';
+    document.getElementById('p2pFields').style.display = 'none';
+    document.getElementById('amountField').style.display = 'none';
+    document.getElementById('descriptionField').style.display = 'none';
+    
+    // Clear all inputs
+    document.querySelectorAll('.transfer-fields input, .transfer-fields select').forEach(input => {
+        input.value = '';
+    });
+    document.getElementById('transferAmount').value = '';
+    document.getElementById('transferDescription').value = '';
+}
+
+function processTransfer() {
+    if (!selectedTransferType) {
+        showAlert('⚠️ Please select a transfer type', 'warning', 4000);
+        return;
+    }
+    
+    const amount = document.getElementById('transferAmount').value;
+    
+    if (!amount || parseFloat(amount) <= 0) {
+        showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
+        return;
+    }
+    
+    let recipient = '';
+    let accountNumber = '';
+    
+    // Validate based on transfer type
+    if (selectedTransferType === 'bank') {
+        const bankName = document.getElementById('bankName').value;
+        accountNumber = document.getElementById('bankAccountNumber').value;
+        
+        if (!bankName) {
+            showAlert('⚠️ Please select a bank', 'warning', 4000);
+            return;
+        }
+        if (!accountNumber) {
+            showAlert('⚠️ Please enter account number', 'warning', 4000);
+            return;
+        }
+        recipient = `${bankName} - ${accountNumber}`;
+        
+    } else if (selectedTransferType === 'momo') {
+        const network = document.getElementById('momoNetwork').value;
+        const phone = document.getElementById('momoPhone').value;
+        
+        if (!network) {
+            showAlert('⚠️ Please select a network', 'warning', 4000);
+            return;
+        }
+        if (!phone) {
+            showAlert('⚠️ Please enter phone number', 'warning', 4000);
+            return;
+        }
+        recipient = `${network} - ${phone}`;
+        
+    } else if (selectedTransferType === 'p2p') {
+        const username = document.getElementById('p2pUsername').value;
+        
+        if (!username) {
+            showAlert('⚠️ Please enter username or phone', 'warning', 4000);
+            return;
+        }
+        recipient = username;
+    }
+    
+    
+    // Show cedi loader
+    showCediLoader();
+    
+    // Close transfer modal
+    closeTransferModal();
+    
+    // Simulate transfer processing
+    setTimeout(() => {
+        hideCediLoader();
+        
+        // Here you would make API call to backend
+        showAlert(`✅ Transfer of ₵${amount} to ${recipient} initiated successfully!`, 'success', 5000);
+        
+        // Add notification
+        notifications.unshift({
+            id: Date.now(),
+            icon: '💸',
+            title: 'Transfer Successful',
+            message: `₵${amount} sent to ${recipient}`,
+            time: 'Just now',
+            read: false,
+            type: 'success'
+        });
+        updateNotificationBadge();
+    }, 2500); // 2.5 seconds loading
+}
+
+// Add input listeners for beneficiary name lookup (placeholder for API)
+document.addEventListener('DOMContentLoaded', function() {
+    // Bank account lookup
+    const bankAccountInput = document.getElementById('bankAccountNumber');
+    const bankNameInput = document.getElementById('bankAccountName');
+    
+    if (bankAccountInput && bankNameInput) {
+        bankAccountInput.addEventListener('input', function() {
+            const value = this.value.trim();
             
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        }
-
-        document.getElementById('hamburger').addEventListener('click', toggleSidebar);
-        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
-
-        // Close sidebar when menu item clicked on mobile
-        if (window.innerWidth <= 768) {
-            document.querySelectorAll('.menu-item').forEach(item => {
-                item.addEventListener('click', toggleSidebar);
-            });
-        }
-
-        // Toggle balance visibility
-        function toggleBalance() {
-            const balanceDisplay = document.getElementById('balanceDisplay');
-            balanceVisible = !balanceVisible;
-            
-            if (balanceVisible) {
-                balanceDisplay.textContent = actualBalance;
-            } else {
-                balanceDisplay.textContent = '₵****.**';
-            }
-        }
-
-        // Fund Modal
-        function openFundModal() {
-            document.getElementById('fundModal').classList.add('active');
-        }
-
-        function closeFundModal() {
-            document.getElementById('fundModal').classList.remove('active');
-        }
-
-        // Withdraw Modal
-        function openWithdrawModal() {
-            document.getElementById('withdrawModal').classList.add('active');
-        }
-
-        function closeWithdrawModal() {
-            document.getElementById('withdrawModal').classList.remove('active');
-        }
-
-        // Select payment method
-        function selectPaymentMethod(element) {
-            document.querySelectorAll('.payment-method').forEach(method => {
-                method.classList.remove('selected');
-            });
-            element.classList.add('selected');
-
-            // Show/hide card fields based on selection
-            const methodName = element.querySelector('h4').textContent;
-            const cardFields = document.getElementById('cardFields');
-            const cardExtraFields = document.getElementById('cardExtraFields');
-
-            if (methodName === 'Debit/Credit Card') {
-                cardFields.style.display = 'block';
-                cardExtraFields.style.display = 'grid';
-            } else {
-                cardFields.style.display = 'none';
-                cardExtraFields.style.display = 'none';
-            }
-        }
-
-        // Process funding
-        function processFunding() {
-            const amount = document.getElementById('fundAmount').value;
-            
-            if (!amount || amount < 10) {
-                alert('Please enter an amount of at least ₵10');
+            if (!value) {
+                bankNameInput.value = '';
                 return;
             }
-
-            alert(`Processing payment of ₵${amount}...\n\nThis will be connected to Paystack/Hubtel API in the backend.`);
-            closeFundModal();
-        }
-
-        // Process withdrawal
-        function processWithdrawal() {
-            alert('Withdrawal request submitted!\n\nThis will be processed by the backend and admin approval.');
-            closeWithdrawModal();
-        }
-
-        // Filter transactions
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
+            
+            if (value.length >= 10) {
+                bankNameInput.value = 'Looking up...';
                 
-                const filter = this.textContent;
-                // Filter logic will be implemented with backend
-                console.log('Filtering by:', filter);
-            });
+                setTimeout(() => {
+                    // TODO: Replace with actual API call
+                    // Example: fetchBankAccountName(value).then(name => bankNameInput.value = name);
+                    bankNameInput.value = 'API Integration Pending';
+                }, 500);
+            }
         });
-
-        // Quick action cards
-        document.querySelectorAll('.action-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const action = this.querySelector('h3').textContent;
-                alert(`Navigating to ${action} page...`);
-            });
-        });
-
-        // Close modals on outside click
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.remove('active');
-                }
-            });
-        });
-
-        // Menu item navigation
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function(e) {
+    }
+    
+    // Mobile Money lookup
+    const momoPhoneInput = document.getElementById('momoPhone');
+    const momoNameInput = document.getElementById('momoAccountName');
+    
+    if (momoPhoneInput && momoNameInput) {
+        momoPhoneInput.addEventListener('input', function() {
+            const value = this.value.trim();
+            
+            if (!value) {
+                momoNameInput.value = '';
+                return;
+            }
+            
+            if (value.length >= 10) {
+                momoNameInput.value = 'Looking up...';
                 
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
+                setTimeout(() => {
+                    // TODO: Replace with actual API call
+                    // Example: fetchMoMoAccountName(value).then(name => momoNameInput.value = name);
+                    momoNameInput.value = 'API Integration Pending';
+                }, 500);
+            }
         });
-
-
-            //Loader functions
-        const MIN_LOADER_TIME = 2000; // 3 cycles × 1s
-        const startTime = Date.now();
-
-        window.addEventListener("load", () => {
-            const elapsed = Date.now() - startTime;
-            const remaining = Math.max(0, MIN_LOADER_TIME - elapsed);
-
-            setTimeout(hideLoader, remaining);
+    }
+    
+    // P2P User lookup
+    const p2pUsernameInput = document.getElementById('p2pUsername');
+    const p2pNameInput = document.getElementById('p2pRecipientName');
+    
+    if (p2pUsernameInput && p2pNameInput) {
+        p2pUsernameInput.addEventListener('input', function() {
+            const value = this.value.trim();
+            
+            if (!value) {
+                p2pNameInput.value = '';
+                return;
+            }
+            
+            if (value.length >= 3) {
+                p2pNameInput.value = 'Looking up...';
+                
+                setTimeout(() => {
+                    // TODO: Replace with actual API call
+                    // Example: fetchPlutliplyUser(value).then(name => p2pNameInput.value = name);
+                    p2pNameInput.value = 'API Integration Pending';
+                }, 500);
+            }
         });
+    }
+});
+// ========================================
+// CEDI LOADER FUNCTIONS
+// ========================================
+function showCediLoader() {
+    const loader = document.getElementById('cediLoader');
+    if (loader) {
+        loader.classList.add('active');
+    }
+}
 
-        function hideLoader() {
-            const loader = document.getElementById("loader");
-            const dashboard = document.querySelector(".dashboard");
-
-            loader.classList.add("hidden");
-
-            setTimeout(() => {
-                loader.style.display = "none";
-                dashboard.style.display = "flex";
-                dashboard.style.opacity = "1";
-            }, 600); // matches fade-out transition
-        }
+function hideCediLoader() {
+    const loader = document.getElementById('cediLoader');
+    if (loader) {
+        loader.classList.remove('active');
+    }
+}
