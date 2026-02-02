@@ -111,13 +111,13 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     });
 });
 
-// Quick action cards
-document.querySelectorAll('.action-card').forEach(card => {
-    card.addEventListener('click', function() {
-        const action = this.querySelector('h3').textContent;
-        showAlert(`Navigating to ${action} page...`);
-    });
-});
+// // Quick action cards
+// document.querySelectorAll('.action-card').forEach(card => {
+//     card.addEventListener('click', function() {
+//         const action = this.querySelector('h3').textContent;
+//         showAlert(`Navigating to ${action} page...`);
+//     });
+// });
 
 // Close modals on outside click
 document.querySelectorAll('.modal').forEach(modal => {
@@ -474,7 +474,7 @@ function processTransfer() {
         const username = document.getElementById('p2pUsername').value;
         
         if (!username) {
-            showAlert('⚠️ Please enter username or phone', 'warning', 4000);
+            showAlert('⚠️ Please enter plutiply username', 'warning', 4000);
             return;
         }
         recipient = username;
@@ -600,4 +600,226 @@ function hideCediLoader() {
     if (loader) {
         loader.classList.remove('active');
     }
+}
+
+// ========================================
+// BUY AIRTIME MODAL FUNCTIONS
+// ========================================
+function openAirtimeModal() {
+    document.getElementById('airtimeModal').classList.add('active');
+}
+
+function closeAirtimeModal() {
+    document.getElementById('airtimeModal').classList.remove('active');
+    // Reset form
+    document.getElementById('airtimeNetwork').value = '';
+    document.getElementById('airtimePhone').value = '';
+    document.getElementById('airtimeAmount').value = '';
+}
+
+function processAirtime() {
+    const network = document.getElementById('airtimeNetwork').value;
+    const phone = document.getElementById('airtimePhone').value;
+    const amount = document.getElementById('airtimeAmount').value;
+    
+    if (!network) {
+        showAlert('⚠️ Please select a network', 'warning', 4000);
+        return;
+    }
+    if (!phone) {
+        showAlert('⚠️ Please enter phone number', 'warning', 4000);
+        return;
+    }
+    if (!amount || parseFloat(amount) <= 0) {
+        showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
+        return;
+    }
+    
+    closeAirtimeModal();
+    showCediLoader();
+    
+    setTimeout(() => {
+        hideCediLoader();
+        showAlert(`✅ Airtime purchase of ₵${amount} for ${phone} successful!`, 'success', 5000);
+        
+        // Add notification
+        notifications.unshift({
+            id: Date.now(),
+            icon: '📱',
+            title: 'Airtime Purchase',
+            message: `₵${amount} airtime sent to ${phone}`,
+            time: 'Just now',
+            read: false,
+            type: 'success'
+        });
+        updateNotificationBadge();
+    }, 2000);
+}
+
+// ========================================
+// BUY DATA MODAL FUNCTIONS
+// ========================================
+function openDataModal() {
+    document.getElementById('dataModal').classList.add('active');
+}
+
+function closeDataModal() {
+    document.getElementById('dataModal').classList.remove('active');
+    // Reset form
+    document.getElementById('dataNetwork').value = '';
+    document.getElementById('dataPhone').value = '';
+    document.getElementById('dataBundle').value = '';
+}
+
+function processData() {
+    const network = document.getElementById('dataNetwork').value;
+    const phone = document.getElementById('dataPhone').value;
+    const bundle = document.getElementById('dataBundle').value;
+    
+    if (!network) {
+        showAlert('⚠️ Please select a network', 'warning', 4000);
+        return;
+    }
+    if (!phone) {
+        showAlert('⚠️ Please enter phone number', 'warning', 4000);
+        return;
+    }
+    if (!bundle) {
+        showAlert('⚠️ Please select a data bundle', 'warning', 4000);
+        return;
+    }
+    
+    closeDataModal();
+    showCediLoader();
+    
+    setTimeout(() => {
+        hideCediLoader();
+        const bundleText = document.getElementById('dataBundle').selectedOptions[0].text;
+        showAlert(`✅ Data bundle ${bundleText} for ${phone} successful!`, 'success', 5000);
+        
+        // Add notification
+        notifications.unshift({
+            id: Date.now(),
+            icon: '📊',
+            title: 'Data Purchase',
+            message: `${bundleText} sent to ${phone}`,
+            time: 'Just now',
+            read: false,
+            type: 'success'
+        });
+        updateNotificationBadge();
+    }, 2000);
+}
+
+// ========================================
+// PAY BILLS MODAL FUNCTIONS
+// ========================================
+function openBillsModal() {
+    document.getElementById('billsModal').classList.add('active');
+}
+
+function closeBillsModal() {
+    document.getElementById('billsModal').classList.remove('active');
+    // Reset form
+    document.getElementById('billType').value = '';
+    document.getElementById('billProvider').value = '';
+    document.getElementById('billAccount').value = '';
+    document.getElementById('billAmount').value = '';
+    document.getElementById('providerField').style.display = 'none';
+    document.getElementById('accountField').style.display = 'none';
+    document.getElementById('amountFieldBills').style.display = 'none';
+}
+
+function updateBillFields() {
+    const billType = document.getElementById('billType').value;
+    const providerField = document.getElementById('providerField');
+    const accountField = document.getElementById('accountField');
+    const amountField = document.getElementById('amountFieldBills');
+    const providerLabel = document.getElementById('providerLabel');
+    const accountLabel = document.getElementById('accountLabel');
+    const providerSelect = document.getElementById('billProvider');
+    
+    if (!billType) {
+        providerField.style.display = 'none';
+        accountField.style.display = 'none';
+        amountField.style.display = 'none';
+        return;
+    }
+    
+    // Show all fields
+    providerField.style.display = 'block';
+    accountField.style.display = 'block';
+    amountField.style.display = 'block';
+    
+    // Update labels and options based on bill type
+    if (billType === 'electricity') {
+        providerLabel.textContent = 'Electricity Company';
+        accountLabel.textContent = 'Meter Number';
+        providerSelect.innerHTML = `
+            <option value="">Select company</option>
+            <option value="ecg">ECG</option>
+        `;
+    } else if (billType === 'cable') {
+        providerLabel.textContent = 'Cable Provider';
+        accountLabel.textContent = 'Smartcard Number';
+        providerSelect.innerHTML = `
+            <option value="">Select provider</option>
+            <option value="dstv">DSTV</option>
+            <option value="gotv">GOtv</option>
+            <option value="startimes">StarTimes</option>
+        `;
+    } else if (billType === 'water') {
+        providerLabel.textContent = 'Water Company';
+        accountLabel.textContent = 'Account Number';
+        providerSelect.innerHTML = `
+            <option value="">Select company</option>
+            <option value="gwcl">GWCL</option>
+            
+        `;
+    }
+}
+
+function processBill() {
+    const billType = document.getElementById('billType').value;
+    const provider = document.getElementById('billProvider').value;
+    const account = document.getElementById('billAccount').value;
+    const amount = document.getElementById('billAmount').value;
+    
+    if (!billType) {
+        showAlert('⚠️ Please select bill type', 'warning', 4000);
+        return;
+    }
+    if (!provider) {
+        showAlert('⚠️ Please select provider', 'warning', 4000);
+        return;
+    }
+    if (!account) {
+        showAlert('⚠️ Please enter account number', 'warning', 4000);
+        return;
+    }
+    if (!amount || parseFloat(amount) <= 0) {
+        showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
+        return;
+    }
+    
+    closeBillsModal();
+    showCediLoader();
+    
+    setTimeout(() => {
+        hideCediLoader();
+        const billTypeText = billType.charAt(0).toUpperCase() + billType.slice(1);
+        showAlert(`✅ ${billTypeText} bill payment of ₵${amount} successful!`, 'success', 5000);
+        
+        // Add notification
+        notifications.unshift({
+            id: Date.now(),
+            icon: '💳',
+            title: `${billTypeText} Bill Payment`,
+            message: `₵${amount} paid for account ${account}`,
+            time: 'Just now',
+            read: false,
+            type: 'success'
+        });
+        updateNotificationBadge();
+    }, 2000);
 }
