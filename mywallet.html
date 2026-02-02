@@ -142,12 +142,12 @@
 
             <!-- Quick Actions -->
             <div class="quick-actions">
-                <div class="action-card">
+                <div class="action-card" onclick="openAirtimeModal()">   
                     <div class="action-icon">📱</div>
                     <h3>Buy Airtime</h3>
                     <p>Quick airtime purchase</p>
                 </div>
-                <div class="action-card">
+                <div class="action-card" onclick="openDataModal()">
                     <div class="action-icon">📊</div>
                     <h3>Buy Data</h3>
                     <p>Purchase data bundles</p>
@@ -157,7 +157,7 @@
                     <h3>Transfer Money</h3>
                     <p>Send to friends</p>
                 </div>
-                <div class="action-card">
+                <div class="action-card" onclick="openBillsModal()">
                     <div class="action-icon">💳</div>
                     <h3>Pay Bills</h3>
                     <p>Electricity, Cable TV, Water Bill</p>
@@ -461,8 +461,8 @@
                                 <!-- P2P Transfer Fields -->
                                 <div id="p2pFields" class="transfer-fields" style="display: none;">
                                     <div class="form-group">
-                                        <label>Plutiply Username or Phone</label>
-                                        <input type="text" id="p2pUsername" class="form-input" placeholder="@username or phone number">
+                                        <label>Plutiply Username</label>
+                                        <input type="text" id="p2pUsername" class="form-input" placeholder="Plutiply Username">
                                     </div>
                                     <div class="form-group">
                                         <label>Recipient Name</label>
@@ -500,6 +500,126 @@
         </div>
     </div>
 
+
+    <!-- Buy Airtime Modal -->
+    <div id="airtimeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Buy Airtime</h2>
+                <button class="close-modal" onclick="closeAirtimeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Network</label>
+                    <select id="airtimeNetwork" class="form-input">
+                        <option value="">Select Network</option>
+                        <option value="mtn">MTN</option>
+                        <option value="vodafone">Vodafone</option>
+                        <option value="airteltigo">AirtelTigo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="airtimePhone" class="form-input" placeholder="0XX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Amount (₵)</label>
+                    <input type="number" id="airtimeAmount" class="form-input" placeholder="Enter amount">
+                </div>
+                <p style="font-size: 12px; color: #888; margin-top: 10px;">
+                    Need more options? <a href="AIRTIME/airtime.html" style="color: #6366f1;">Visit full airtime page</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeAirtimeModal()">Cancel</button>
+                <button class="submit-btn" onclick="processAirtime()">Buy Airtime</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Data Modal -->
+    <div id="dataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Buy Data</h2>
+                <button class="close-modal" onclick="closeDataModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Network</label>
+                    <select id="dataNetwork" class="form-input">
+                        <option value="">Select Network</option>
+                        <option value="mtn">MTN</option>
+                        <option value="vodafone">Vodafone</option>
+                        <option value="airteltigo">AirtelTigo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="dataPhone" class="form-input" placeholder="0XX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Data Bundle</label>
+                    <select id="dataBundle" class="form-input">
+                        <option value="">Select bundle</option>
+                        <option value="1gb">1GB - ₵0</option>
+                        <option value="2gb">2GB - ₵0</option>
+                        <option value="5gb">5GB - ₵0</option>
+                        <option value="10gb">10GB - ₵0</option>
+                    </select>
+                </div>
+                <p style="font-size: 12px; color: #888; margin-top: 10px;">
+                    Need more bundles? <a href="DATA/data.html" style="color: #6366f1;">Visit full data page</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeDataModal()">Cancel</button>
+                <button class="submit-btn" onclick="processData()">Buy Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay Bills Modal -->
+    <div id="billsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Pay Bills</h2>
+                <button class="close-modal" onclick="closeBillsModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Bill Type</label>
+                    <select id="billType" class="form-input" onchange="updateBillFields()">
+                        <option value="">Select bill type</option>
+                        <option value="electricity">Electricity</option>
+                        <option value="cable">Cable TV</option>
+                        <option value="water">Water Bill</option>
+                    </select>
+                </div>
+                <div class="form-group" id="providerField" style="display: none;">
+                    <label id="providerLabel">Provider</label>
+                    <select id="billProvider" class="form-input">
+                        <option value="">Select provider</option>
+                    </select>
+                </div>
+                <div class="form-group" id="accountField" style="display: none;">
+                    <label id="accountLabel">Account Number</label>
+                    <input type="text" id="billAccount" class="form-input" placeholder="Enter account number">
+                </div>
+                <div class="form-group" id="amountFieldBills" style="display: none;">
+                    <label>Amount (₵)</label>
+                    <input type="number" id="billAmount" class="form-input" placeholder="Enter amount">
+                </div>
+                <p style="font-size: 12px; color: #888; margin-top: 10px;">
+                    Need more options? <a href="#" style="color: #6366f1;">Visit full bills page</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeBillsModal()">Cancel</button>
+                <button class="submit-btn" onclick="processBill()">Pay Bill</button>
+            </div>
+        </div>
+    </div>
 
    <script src="walletjs.js"></script>
        
