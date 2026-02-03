@@ -1,4 +1,4 @@
-   //Loader functions
+//Loader functions
 const MIN_LOADER_TIME = 2000; // 2 cycles × 1s
 const startTime = Date.now();
 
@@ -23,7 +23,7 @@ function hideLoader() {
 } 
      
 // Constants
-const WALLET_BALANCE = 54812.00;
+const WALLET_BALANCE = 0.00;
 const MIN_AMOUNT = 1;
 const PHONE_REGEX = /^0\d{9}$/;
 const PROCESSING_TIME = 2000;
@@ -33,14 +33,240 @@ let selectedNetwork = null;
 let purchaseMode = 'single'; // 'single' or 'bulk'
 let recipientCount = 0;
 let isProcessing = false;
+let balanceVisible = true;
+const actualBalance = 54812.00;
+
+// ========================================
+// NOTIFICATION SYSTEM (Wallet Style)
+// ========================================
+const notifications = [
+    {
+        id: 1,
+        icon: '💸',
+        title: 'Welcome to Plutiply!',
+        message: 'Your Reliable Digital Transaction Partner',
+        time: 'now',
+        read: false,
+        type: 'info'
+    }
+];
+
+function createNotificationPanel() {
+    const panel = document.createElement('div');
+    panel.id = 'notificationPanel';
+    panel.className = 'notification-panel';
+    
+    const unreadCount = notifications.filter(n => !n.read).length;
+    
+    let notificationHTML = `
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <span class="notification-count">${unreadCount} New</span>
+        </div>
+        <div class="notification-actions">
+            <button class="notification-action-btn" onclick="markAllAsRead()">Mark all as read</button>
+            <button class="notification-action-btn" onclick="clearAllNotifications()">Clear all</button>
+        </div>
+        <div class="notification-list">
+    `;
+    
+    if (notifications.length === 0) {
+        notificationHTML += `
+            <div class="notification-empty">
+                <span style="font-size: 48px;">🔔</span>
+                <p>No notifications yet</p>
+            </div>
+        `;
+    } else {
+        notifications.forEach(notif => {
+            notificationHTML += `
+                <div class="notification-item ${notif.read ? 'read' : 'unread'}" data-id="${notif.id}">
+                    <div class="notification-icon ${notif.type}">${notif.icon}</div>
+                    <div class="notification-content">
+                        <div class="notification-title">${notif.title}</div>
+                        <div class="notification-message">${notif.message}</div>
+                        <div class="notification-time">${notif.time}</div>
+                    </div>
+                    <button class="notification-close" onclick="removeNotification(${notif.id})">×</button>
+                </div>
+            `;
+        });
+    }
+    
+    notificationHTML += `
+        </div>
+        <div class="notification-footer">
+            <a href="#" class="view-all-link" onclick="closeNotificationPanel(event)">Close</a>
+        </div>
+    `;
+    
+    panel.innerHTML = notificationHTML;
+    return panel;
+}
+
+function toggleNotificationPanel() {
+    let panel = document.getElementById('notificationPanel');
+    
+    if (panel) {
+        // Close panel
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+    } else {
+        // Open panel
+        panel = createNotificationPanel();
+        document.body.appendChild(panel);
+        
+        // Position panel near notification button
+        const notifBtn = document.querySelector('.notification-btn');
+        if (notifBtn) {
+            const rect = notifBtn.getBoundingClientRect();
+            panel.style.top = rect.bottom + 10 + 'px';
+            panel.style.right = window.innerWidth - rect.right + 'px';
+        }
+        
+        // Trigger animation
+        setTimeout(() => panel.classList.add('active'), 10);
+        
+        // Close when clicking outside
+        setTimeout(() => {
+            document.addEventListener('click', closeOnClickOutside);
+        }, 100);
+    }
+    
+    updateNotificationBadge();
+}
+
+function closeOnClickOutside(e) {
+    const panel = document.getElementById('notificationPanel');
+    const notifBtn = document.querySelector('.notification-btn');
+    
+    if (panel && !panel.contains(e.target) && !notifBtn.contains(e.target)) {
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+        document.removeEventListener('click', closeOnClickOutside);
+    }
+}
+
+function closeNotificationPanel(event) {
+    if (event) event.preventDefault();
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.classList.remove('active');
+        setTimeout(() => panel.remove(), 300);
+        document.removeEventListener('click', closeOnClickOutside);
+    }
+}
+
+function markAllAsRead() {
+    notifications.forEach(n => n.read = true);
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.remove();
+        toggleNotificationPanel();
+    }
+    showAlert('✓ All notifications marked as read', 'success', 3000);
+}
+
+function clearAllNotifications() {
+    notifications.length = 0;
+    const panel = document.getElementById('notificationPanel');
+    if (panel) {
+        panel.remove();
+        toggleNotificationPanel();
+    }
+    showAlert('✓ All notifications cleared', 'success', 3000);
+}
+
+function removeNotification(id) {
+    const index = notifications.findIndex(n => n.id === id);
+    if (index > -1) {
+        notifications.splice(index, 1);
+        const panel = document.getElementById('notificationPanel');
+        if (panel) {
+            panel.remove();
+            toggleNotificationPanel();
+        }
+    }
+}
+
+function updateNotificationBadge() {
+    const notifBtn = document.querySelector('.notification-btn');
+    const unreadCount = notifications.filter(n => !n.read).length;
+    
+    // Add or remove has-notifications class
+    if (unreadCount > 0 && notifBtn) {
+        notifBtn.classList.add('has-notifications');
+    } else if (notifBtn) {
+        notifBtn.classList.remove('has-notifications');
+    }
+}
+
+function addNotification(type, title, message) {
+    const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+    };
+
+    const notification = {
+        id: Date.now(),
+        type: type,
+        icon: icons[type] || 'ℹ️',
+        title: title,
+        message: message,
+        time: 'Just now',
+        read: false
+    };
+
+    notifications.unshift(notification);
+    updateNotificationBadge();
+}
+
+// Show Alert Function
+function showAlert(message, type = 'info', duration = 5000) {
+    const alertContainer = document.getElementById('alertContainer');
+    
+    const alert = document.createElement('div');
+    alert.className = `alert ${type}`;
+    alert.textContent = message;
+    
+    alertContainer.appendChild(alert);
+    
+    // Auto remove after duration
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transform = 'translateX(400px)';
+        setTimeout(() => alert.remove(), 300);
+    }, duration);
+}
+
+// Balance Visibility Toggle (Wallet Style)
+function toggleBalance() {
+    const balanceDisplay = document.getElementById('walletBalance');
+    balanceVisible = !balanceVisible;
+    
+    if (balanceVisible) {
+        balanceDisplay.textContent = `₵${actualBalance.toFixed(2)}`;
+    } else {
+        balanceDisplay.textContent = '₵****.**';
+    }
+}
 
 // Initialize
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
     setupEventListeners();
+    updateNotificationBadge();
     // Add first recipient when in bulk mode
     addRecipient();
+    
+    // Add notification button click handler
+    const notificationBtn = document.querySelector('.notification-btn');
+    if (notificationBtn) {
+        notificationBtn.addEventListener('click', toggleNotificationPanel);
+    }
 }
 
 function setupEventListeners() {
@@ -99,7 +325,10 @@ function setupEventListeners() {
 
     // Fund wallet button
     document.getElementById('fundWalletBtn').addEventListener('click', () => {
-        alert('Redirecting to Fund Wallet page...');
+        showAlert('Redirecting to Fund Wallet page...', 'info', 2000);
+        setTimeout(() => {
+            window.location.href = 'mywallet.html';
+        }, 1500);
     });
 
     // Success modal close
@@ -109,6 +338,7 @@ function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeSuccessModal();
+            closeNotificationPanel();
         }
     });
 
@@ -127,6 +357,31 @@ function setupEventListeners() {
     }
 }
 
+// ========================================
+// ALERT SYSTEM
+// ========================================
+function showAlert(message, type = 'success', duration = 5000) {
+    let container = document.getElementById('alertContainer');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'alertContainer';
+        document.body.appendChild(container);
+    }
+
+    const alert = document.createElement('div');
+    alert.className = `alert ${type}`;
+    alert.innerHTML = `
+        ${message}
+        <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+    `;
+
+    container.appendChild(alert);
+
+    setTimeout(() => {
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 600);
+    }, duration);
+}
 // Toggle sidebar
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -265,7 +520,7 @@ function addRecipient() {
             </div>
             <div class="recipient-network-group">
                 <label>Network</label>
-                <div class="recipient-network-options">
+                <div class="recipient-networks">
                     <button class="recipient-network-btn" data-network="MTN">MTN</button>
                     <button class="recipient-network-btn" data-network="AirtelTigo">AirtelTigo</button>
                     <button class="recipient-network-btn" data-network="Glo">Glo</button>
@@ -381,7 +636,7 @@ function updateBulkSummary() {
     const breakdownDiv = document.getElementById('summaryNetworkBreakdown');
     if (Object.keys(networkCounts).length > 1) {
         breakdownDiv.style.display = 'block';
-        breakdownDiv.innerHTML = '<div style="margin: 10px 0; padding-top: 10px; border-top: 1px solid #eee;">';
+        breakdownDiv.innerHTML = '<div style="margin: 10px 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">';
         
         Object.entries(networkCounts).forEach(([network, count]) => {
             breakdownDiv.innerHTML += `
@@ -404,7 +659,7 @@ function validateSinglePurchase() {
     
     // Validate network
     if (!selectedNetwork) {
-        alert('Please select a network');
+        showAlert('Please select a network', 'error');
         return false;
     }
     
@@ -457,39 +712,35 @@ function validateBulkPurchase() {
     
     // Validate amount
     const amount = parseFloat(document.getElementById('bulkAmount').value);
-    const bulkAmountError = document.getElementById('bulkAmountError');
-    const bulkAmountInput = document.getElementById('bulkAmount');
+    const amountError = document.getElementById('bulkAmountError');
+    const amountInput = document.getElementById('bulkAmount');
     
     if (!amount || amount < MIN_AMOUNT) {
-        bulkAmountError.textContent = `Amount must be at least ₵${MIN_AMOUNT}`;
-        bulkAmountError.classList.add('show');
-        bulkAmountInput.classList.add('error');
-        isValid = false;
+        amountError.textContent = `Amount must be at least ₵${MIN_AMOUNT}`;
+        amountError.classList.add('show');
+        amountInput.classList.add('error');
+        return false;
     } else {
-        bulkAmountError.classList.remove('show');
-        bulkAmountInput.classList.remove('error');
+        amountError.classList.remove('show');
+        amountInput.classList.remove('error');
     }
     
     // Validate recipients
     const recipientItems = document.querySelectorAll('.recipient-item');
     const validRecipients = [];
-    const phoneNumbers = new Set();
     const duplicates = [];
     const invalidRecipients = [];
     const missingNetworkRecipients = [];
+    const phoneNumbers = new Set();
     
     recipientItems.forEach((item, index) => {
-        const phone = item.querySelector('.recipient-phone-input').value.trim();
         const phoneInput = item.querySelector('.recipient-phone-input');
         const phoneError = item.querySelector('.recipient-error');
+        const phone = phoneInput.value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
         
-        // Clear previous errors
-        phoneError.classList.remove('show');
-        phoneInput.classList.remove('error');
-        
-        if (phone === '') {
-            // Skip empty recipients
+        // Skip empty recipients
+        if (phone === '' && !selectedNetworkBtn) {
             return;
         }
         
@@ -528,22 +779,22 @@ function validateBulkPurchase() {
     });
     
     if (validRecipients.length === 0) {
-        alert('Please add at least one recipient with phone number and network');
+        showAlert('Please add at least one recipient with phone number and network', 'error');
         return false;
     }
     
     if (duplicates.length > 0) {
-        alert(`Duplicate phone number(s) detected: ${[...new Set(duplicates)].join(', ')}`);
+        showAlert(`Duplicate phone number(s) detected: ${[...new Set(duplicates)].join(', ')}`, 'error');
         return false;
     }
     
     if (invalidRecipients.length > 0) {
-        alert(`Invalid phone number(s) for recipient ${invalidRecipients.join(', ')}`);
+        showAlert(`Invalid phone number(s) for recipient ${invalidRecipients.join(', ')}`, 'error');
         return false;
     }
     
     if (missingNetworkRecipients.length > 0) {
-        alert(`Please select a network for recipient ${missingNetworkRecipients.join(', ')}`);
+        showAlert(`Please select a network for recipient ${missingNetworkRecipients.join(', ')}`, 'error');
         return false;
     }
     
@@ -553,6 +804,7 @@ function validateBulkPurchase() {
         document.getElementById('bulkAmountError').classList.add('show');
         document.getElementById('bulkAmountError').textContent = `Total cost (₵${totalCost.toFixed(2)}) exceeds wallet balance`;
         document.getElementById('bulkAmount').classList.add('error');
+        showAlert(`Total cost (₵${totalCost.toFixed(2)}) exceeds wallet balance`, 'error');
         isValid = false;
     }
     
@@ -625,6 +877,12 @@ function showSingleSuccess() {
     document.getElementById('successTxId').textContent = txId;
     
     document.getElementById('successModal').classList.add('active');
+
+    // Add notification
+    addNotification('success', 'Purchase Successful', `Airtime of ₵${amount.toFixed(2)} sent to ${phone}`);
+    
+    // Show success alert
+    showAlert(`✓ Airtime sent successfully to ${phone}`, 'success', 3000);
     
     resetForm();
 }
@@ -674,6 +932,12 @@ function showBulkSuccess() {
     });
     
     document.getElementById('successModal').classList.add('active');
+
+    // Add notification
+    addNotification('success', 'Bulk Purchase Successful', `Airtime sent to ${validRecipients.length} recipients`);
+    
+    // Show success alert
+    showAlert(`✓ Airtime sent to ${validRecipients.length} recipients`, 'success', 3000);
     
     resetForm();
 }
