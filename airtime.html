@@ -22,15 +22,15 @@
 
             <nav>
                 <div class="menu-section">
-                    <a href="dashboard.html" class="menu-item">
+                    <a href="DASHBOARD/dashboard.html" class="menu-item">
                         <span class="icon">🏠</span>
                         <span class="text">Dashboard</span>
                     </a>
-                    <a href="mywallet.html" class="menu-item active">
+                    <a href="WALLET/mywallet.html" class="menu-item">
                         <span class="icon">💰</span>
                         <span class="text">My Wallet</span>
                     </a>
-                    <a href="airtime.html" class="menu-item">
+                    <a href="airtime.html" class="menu-item active">
                         <span class="icon">📱</span>
                         <span class="text">Buy Airtime</span>
                     </a>
@@ -119,11 +119,21 @@
                 </div>
             </header>
 
+            <!-- Notification Panel will be dynamically created -->
+
+            <!-- Alert Container -->
+            <div class="alert-container" id="alertContainer">
+                <!-- Alerts will be dynamically inserted here -->
+            </div>
+
             <!-- Wallet Balance Banner -->
             <div class="balance-banner">
                 <div class="balance-info">
                     <h3>Wallet Balance</h3>
-                    <p id="walletBalance">₵54,812.00</p>
+                    <div class="balance-amount">
+                        <span id="walletBalance">₵0.00</span>
+                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                    </div>
                 </div>
                 <button class="fund-wallet-btn" id="fundWalletBtn">Fund Wallet</button>
             </div>
@@ -150,7 +160,7 @@
                         <div class="network-name">AirtelTigo</div>
                     </div>
                     <div class="network-card" data-network="Glo" tabindex="0" role="button">
-                        <div class="network-logo">🌐</div>
+                        <div class="network-logo">🌍</div>
                         <div class="network-name">Glo</div>
                     </div>
                     <div class="network-card" data-network="Telecel" tabindex="0" role="button">
