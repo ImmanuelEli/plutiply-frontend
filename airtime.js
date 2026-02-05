@@ -34,7 +34,7 @@ let purchaseMode = 'single'; // 'single' or 'bulk'
 let recipientCount = 0;
 let isProcessing = false;
 let balanceVisible = true;
-const actualBalance = 54812.00;
+const actualBalance = 0.00;
 
 // ========================================
 // NOTIFICATION SYSTEM (Wallet Style)
