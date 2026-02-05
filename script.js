@@ -1,21 +1,21 @@
 // Splash Screen Animation
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     const splash = document.getElementById('splashScreen');
     const mainContent = document.getElementById('mainContent');
-    
+
     // Wait for splash animation to complete (3.5 seconds)
     setTimeout(() => {
         // Start fading out splash
         splash.classList.add('fade-out');
-        
+
         // Show main content at the same time
         mainContent.classList.add('show');
-        
+
         // Remove splash from DOM after fade completes
         setTimeout(() => {
             splash.style.display = 'none';
         }, 800); // Css transition duration
-        
+
     }, 3500); // Timer for loader
 });
 
@@ -35,7 +35,7 @@ function toggleBodyScroll(shouldLock) {
 function toggleMenu() {
     const navLinks = document.getElementById('navLinks');
     const menuToggle = document.getElementById('menuToggle');
-    
+
     if (navLinks && menuToggle) {
         navLinks.classList.toggle('active');
         menuToggle.classList.toggle('active');
@@ -44,29 +44,29 @@ function toggleMenu() {
 
 
 // Smooth Scrolling for Anchor Links
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            
+
             // Skip if it's just "#" or "javascript:void(0)"
             if (href === '#' || href === 'javascript:void(0)') {
                 return;
             }
-            
+
             e.preventDefault();
             const target = document.querySelector(href);
-            
+
             if (target) {
                 target.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
-                
+
                 // Close mobile menu if open
                 const navLinks = document.getElementById('navLinks');
                 const menuToggle = document.getElementById('menuToggle');
-                
+
                 if (navLinks) {
                     navLinks.classList.remove('active');
                 }
@@ -94,7 +94,7 @@ function openAuthModal(tab = 'login') {
     const modal = document.getElementById('authModal');
     modal.classList.add('active');
     toggleBodyScroll(true);
-    
+
     // Reset forms
     const forms = document.querySelectorAll('.form');
     forms.forEach(form => {
@@ -103,17 +103,17 @@ function openAuthModal(tab = 'login') {
             form.reset();
         }
     });
-    
+
     // Clear password strength indicator
     const strengthBar = document.getElementById('strengthBar');
     if (strengthBar) {
         strengthBar.className = 'password-strength-bar';
     }
-    
+
     // Clear error messages
     const errorMessages = document.querySelectorAll('.error-message');
     errorMessages.forEach(error => error.classList.remove('show'));
-    
+
     // Switch to requested tab
     switchTab(tab);
 }
@@ -129,11 +129,11 @@ function closeAuthModal() {
 function switchTab(tab) {
     const tabs = document.querySelectorAll('.tab');
     const forms = document.querySelectorAll('.form');
-    
+
     // Remove active class from all tabs and forms
     tabs.forEach(t => t.classList.remove('active'));
     forms.forEach(f => f.classList.remove('active'));
-    
+
     // Activate the selected tab and form
     if (tab === 'login') {
         tabs[0].classList.add('active');
@@ -145,10 +145,10 @@ function switchTab(tab) {
 }
 
 // Close modal when clicking outside
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const authModal = document.getElementById('authModal');
     if (authModal) {
-        authModal.addEventListener('click', function(e) {
+        authModal.addEventListener('click', function (e) {
             if (e.target === this) {
                 closeAuthModal();
             }
@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
     const toggle = input.nextElementSibling;
-    
+
     if (input.type === 'password') {
         input.type = 'text';
         toggle.textContent = '🙈';
@@ -175,30 +175,30 @@ function togglePassword(inputId) {
 function checkPasswordStrength() {
     const password = document.getElementById('password').value;
     const bar = document.getElementById('strengthBar');
-    
+
     // Reset bar
     bar.className = 'password-strength-bar';
-    
+
     if (!password) return;
-    
+
     const hasUpper = /[A-Z]/.test(password);
     const hasLower = /[a-z]/.test(password);
     const hasNumber = /\d/.test(password);
     const hasSymbol = /[^A-Za-z0-9]/.test(password);
     const length = password.length;
-    
+
     // Weak: Less than 8 characters or missing basic requirements
     if (length < 8 || !(hasUpper && hasLower)) {
         bar.classList.add('strength-weak');
         return;
     }
-    
+
     // Strong: 10+ characters with all requirements
     if (length >= 10 && hasUpper && hasLower && hasNumber && hasSymbol) {
         bar.classList.add('strength-strong');
         return;
     }
-    
+
     // Medium: 8+ characters with basic requirements
     if (length >= 8 && hasUpper && hasLower && hasNumber) {
         bar.classList.add('strength-medium');
@@ -206,17 +206,17 @@ function checkPasswordStrength() {
 }
 
 // Password Match Validation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const password = document.getElementById('password');
     const confirmPassword = document.getElementById('confirmPassword');
     const error = document.getElementById('passwordError');
-    
+
     if (confirmPassword && password && error) {
         // Function to check password match
-        const checkPasswordMatch = function() {
+        const checkPasswordMatch = function () {
             const passValue = password.value;
             const confirmValue = confirmPassword.value;
-            
+
             // Only show error if:
             // 1. Confirm password has some value
             // 2. Password has some value
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 error.classList.remove('show');
             }
         };
-        
+
         // Check on both inputs
         confirmPassword.addEventListener('input', checkPasswordMatch);
         password.addEventListener('input', checkPasswordMatch);
@@ -239,31 +239,31 @@ document.addEventListener('DOMContentLoaded', function() {
 function generateUsername() {
     const fullNameInput = document.getElementById('fullName');
     const usernameInput = document.getElementById('username');
-    
+
     if (!fullNameInput || !usernameInput) return;
-    
+
     const fullName = fullNameInput.value.trim();
-    
+
     // If no name is entered, use random generation
     if (!fullName) {
         alert('Please enter your full name first!');
         fullNameInput.focus();
         return;
     }
-    
+
     // Remove special characters and split name into parts
     const nameParts = fullName
         .replace(/[^a-zA-Z\s]/g, '') // Remove non-letter characters except spaces
         .split(/\s+/) // Split by whitespace
         .filter(part => part.length > 0); // Remove empty parts
-    
+
     if (nameParts.length === 0) {
         alert('Please enter a valid name!');
         return;
     }
-    
+
     let username = '';
-    
+
     // Different strategies for generating username
     const strategies = [
         // Strategy 1: FirstnameLastname + number (e.g., JohnDoe123)
@@ -273,7 +273,7 @@ function generateUsername() {
             }
             return nameParts[0] + Math.floor(Math.random() * 10000);
         },
-        
+
         // Strategy 2: First initial + Lastname + number (e.g., JDoe456)
         () => {
             if (nameParts.length >= 2) {
@@ -281,7 +281,7 @@ function generateUsername() {
             }
             return nameParts[0] + Math.floor(Math.random() * 10000);
         },
-        
+
         // Strategy 3: Firstname + Last initial + number (e.g., JohnD789)
         () => {
             if (nameParts.length >= 2) {
@@ -289,17 +289,17 @@ function generateUsername() {
             }
             return nameParts[0] + Math.floor(Math.random() * 10000);
         },
-        
+
         // Strategy 4: Firstname + underscore + number (e.g., John_1234)
         () => {
             return nameParts[0] + '_' + Math.floor(Math.random() * 10000);
         }
     ];
-    
+
     // Randomly pick a strategy
     const randomStrategy = strategies[Math.floor(Math.random() * strategies.length)];
     username = randomStrategy();
-    
+
     // Ensure username meets requirements (3-20 characters)
     if (username.length < 3) {
         username = username + Math.floor(Math.random() * 1000);
@@ -307,9 +307,9 @@ function generateUsername() {
     if (username.length > 20) {
         username = username.substring(0, 17) + Math.floor(Math.random() * 100);
     }
-    
+
     usernameInput.value = username;
-    
+
     // Add a small animation effect
     usernameInput.style.animation = 'none';
     setTimeout(() => {
@@ -318,71 +318,208 @@ function generateUsername() {
 }
 
 
+// ==================== BACKEND API INTEGRATION ====================
+const API_URL = 'http://localhost:5000/api';
+
+// Toast notification helper
+function showMessage(message, type = 'success') {
+    const existingMsg = document.querySelector('.toast-message');
+    if (existingMsg) existingMsg.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast-message toast-${type}`;
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        padding: 15px 25px;
+        background: ${type === 'success' ? '#22c55e' : '#f44336'};
+        color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        z-index: 9999;
+        font-weight: 500;
+        animation: slideIn 0.3s ease;
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+// Add toast animation styles
+const toastStyle = document.createElement('style');
+toastStyle.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(400px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(400px); opacity: 0; }
+    }
+`;
+document.head.appendChild(toastStyle);
+
 // Form Submission Handlers
-document.addEventListener('DOMContentLoaded', function() {
-    // Login Form
+document.addEventListener('DOMContentLoaded', function () {
+    // ===== LOGIN FORM =====
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
-            const email = formData.get('email');
-            const password = formData.get('password');
-            
-            console.log('Login attempt:', { email, password: '***' });
-            
-            // TODO: Add login API call here
-            
+            const requestData = {
+                emailOrPhone: formData.get('email'),
+                password: formData.get('password')
+            };
+
+            const submitBtn = this.querySelector('.btn-modal');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Logging in...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('plutiply_token', data.data.token);
+                    localStorage.setItem('plutiply_user', JSON.stringify(data.data.user));
+
+                    showMessage(`Welcome back, ${data.data.user.fullName}! 👋`, 'success');
+
+                    setTimeout(() => {
+                        closeAuthModal();
+                        this.reset();
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Connection error. Check if server is running.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
-    
-    // Signup Form
+
+    // ===== SIGNUP FORM =====
     const signupForm = document.getElementById('signupForm');
     if (signupForm) {
-        signupForm.addEventListener('submit', function(e) {
+        signupForm.addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const password = formData.get('password');
             const confirmPassword = formData.get('confirmPassword');
-            
-            // Check if passwords match
+
+            // Validate passwords match
             if (password !== confirmPassword) {
-                alert('Passwords do not match!');
+                showMessage('Passwords do not match!', 'error');
                 return;
             }
-            
-            // Check if terms are accepted
+
+            // Check terms
             const termsAccepted = document.getElementById('terms').checked;
             if (!termsAccepted) {
-                alert('Please accept the Terms & Conditions');
+                showMessage('Please accept the Terms & Conditions', 'error');
                 return;
             }
-            
-            // Collect all form data
-            const userData = {
+
+            const requestData = {
                 fullName: formData.get('fullName'),
                 username: formData.get('username'),
                 email: formData.get('email'),
-                phone: formData.get('phone'),
+                phoneNumber: formData.get('phone'),
                 countryCode: document.getElementById('countryCode').value,
                 password: password,
-                referralCode: formData.get('referralCode')
+                referralCode: formData.get('referralCode') || null
             };
-            
-            console.log('Signup attempt:', { ...userData, password: '***' });
-            
-            // TODO: Add your signup API call here
 
+
+
+            // Generate random username
+            function generateUsername() {
+                const fullNameInput = document.getElementById('fullName');
+                const usernameInput = document.getElementById('username');
+
+                if (!fullNameInput.value.trim()) {
+                    alert('Please enter your full name first');
+                    fullNameInput.focus();
+                    return;
+                }
+
+                // Take first name and add random numbers
+                const firstName = fullNameInput.value.trim().split(' ')[0].toLowerCase();
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                const username = `${firstName}${randomNum}`;
+
+                usernameInput.value = username;
+            }
+            const submitBtn = this.querySelector('.btn-modal');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating Account...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem('plutiply_token', data.data.token);
+                    localStorage.setItem('plutiply_user', JSON.stringify(data.data.user));
+
+                    showMessage('Account created successfully! 🎉', 'success');
+
+                    setTimeout(() => {
+                        closeAuthModal();
+                        this.reset();
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showMessage(data.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMessage('Connection error. Check if server is running.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
+    }
+
+    // Check if user is already logged in
+    const token = localStorage.getItem('plutiply_token');
+    const user = localStorage.getItem('plutiply_user');
+    if (token && user) {
+        console.log('User already logged in:', JSON.parse(user));
     }
 });
 
 
 // Google Sign-In (Placeholder)
 function googleSignIn() {
-    
+
 }
 
 
@@ -391,42 +528,42 @@ function googleSignIn() {
 // Load Country Codes from API
 async function loadCountryCodes() {
     const select = document.getElementById('countryCode');
-    
+
     if (!select) return;
-    
+
     // Set Ghana as immediate default (in case API is slow)
     select.innerHTML = '<option value="+233" selected>🇬🇭 +233 Ghana</option>';
-    
+
     try {
         const response = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,cca2,flag');
         const countries = await response.json();
-        
+
         // Sort countries alphabetically
         countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
-        
+
         // Clear select
         select.innerHTML = '';
-        
+
         // Add Ghana first (always at top and selected)
         const ghanaOption = document.createElement('option');
         ghanaOption.value = '+233';
         ghanaOption.textContent = '🇬🇭 +233 Ghana';
         ghanaOption.selected = true;
         select.appendChild(ghanaOption);
-        
+
         // Add separator
         const separator = document.createElement('option');
         separator.disabled = true;
         separator.textContent = '─────────────────';
         select.appendChild(separator);
-        
+
         // Add other countries
         countries.forEach(country => {
             // Skip Ghana since we already added it at top
             if (country.cca2 === 'GH') return;
-            
+
             const callingCode = country.idd.root + (country.idd.suffixes?.[0] || '');
-            
+
             if (callingCode && callingCode !== '+') {
                 const option = document.createElement('option');
                 option.value = callingCode;
@@ -443,9 +580,9 @@ async function loadCountryCodes() {
 // Fallback Country Codes (if API fails)
 function loadFallbackCountryCodes() {
     const select = document.getElementById('countryCode');
-    
+
     if (!select) return;
-    
+
     select.innerHTML = `
         <option value="+233" selected>🇬🇭 +233 Ghana</option>
         <option disabled>─────────────────</option>
@@ -461,17 +598,17 @@ function loadFallbackCountryCodes() {
 
 
 // Initialize country codes on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadCountryCodes();
 });
 
 
 // Close mobile menu when clicking outside
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     const navLinks = document.getElementById('navLinks');
     const menuToggle = document.getElementById('menuToggle');
     const nav = document.querySelector('nav');
-    
+
     if (navLinks && menuToggle && nav) {
         // If click is outside nav and menu is open
         if (!nav.contains(e.target) && navLinks.classList.contains('active')) {
@@ -482,11 +619,11 @@ document.addEventListener('click', function(e) {
 });
 
 // Prevent form submission on Enter key in certain inputs (optional)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const preventEnterSubmit = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
-    
+
     preventEnterSubmit.forEach(input => {
-        input.addEventListener('keypress', function(e) {
+        input.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 // Move to next input
@@ -504,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Add animation to service cards on scroll (optional enhancement)
 function animateOnScroll() {
     const elements = document.querySelectorAll('.service-card, .feature-item, .step');
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -515,7 +652,7 @@ function animateOnScroll() {
     }, {
         threshold: 0.1
     });
-    
+
     elements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
@@ -525,7 +662,7 @@ function animateOnScroll() {
 }
 
 // Initialize scroll animations
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     animateOnScroll();
 });
 
