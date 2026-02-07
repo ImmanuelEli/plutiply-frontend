@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plutiply - Buy Data bundles for MTN, AirtelTigo, Glo, and Telecel">
+    <meta name="author" content="Plutiply">
+    <title>Plutiply - Buy Data</title>
+    <link rel="stylesheet" href="data.css">
+</head>
+<body>
+
+    <!-- ========================================
+         PAGE LOADER
+         ======================================== -->
+    <div class="loader-overlay" id="loader">
+        <div class="loader-circle-50"></div>
+    </div>
+
+    <!-- ========================================
+         ALERT CONTAINER
+         ======================================== -->
+    <div id="alertContainer"></div>
+    
+
+    <!-- ========================================
+         MAIN DASHBOARD
+         ======================================== -->
+    <div class="dashboard">
+        
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Notification Button - Fixed at top right -->
+        <button class="icon-btn notification-btn" id="notificationBtn" onclick="toggleNotifications()">🔔</button>
+
+        <!-- ========================================
+             SIDEBAR NAVIGATION
+             ======================================== -->
+        <aside class="sidebar" id="sidebar">
+            
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <h2>Plutiply</h2>
+                <p>Your Reliable Transaction Partner</p>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav>
+                <!-- Main Menu Section -->
+                <div class="menu-section">
+                    <a href="dashboard.html" class="menu-item">
+                        <span class="icon">🏠</span>
+                        <span class="text">Dashboard</span>
+                    </a>
+                    <a href="mywallet.html" class="menu-item active">
+                        <span class="icon">💰</span>
+                        <span class="text">My Wallet</span>
+                    </a>
+                    <a href="airtime.html" class="menu-item">
+                        <span class="icon">📱</span>
+                        <span class="text">Buy Airtime</span>
+                    </a>
+                    <a href="data.html" class="menu-item">
+                        <span class="icon">📊</span>
+                        <span class="text">Buy Data</span>
+                    </a>
+                    <a href="cable.html" class="menu-item">
+                        <span class="icon">📺</span>
+                        <span class="text">Cable TV</span>
+                    </a>
+                    <a href="utilities.html" class="menu-item">
+                        <span class="icon">⚡</span>
+                        <span class="text">Utilities</span>
+                    </a>
+                    <a href="exam.html" class="menu-item">
+                        <span class="icon">🎓</span>
+                        <span class="text">Exam Vouchers</span>
+                    </a>
+                </div>
+
+                <!-- Analytics Section -->
+                <div class="menu-section">
+                    <h3>Analytics</h3>
+                    <a href="statistics.html" class="menu-item">
+                        <span class="icon">📈</span>
+                        <span class="text">Statistics</span>
+                    </a>
+                    <a href="referrals.html" class="menu-item">
+                        <span class="icon">🎁</span>
+                        <span class="text">Referrals</span>
+                    </a>
+                </div>
+
+                <!-- Support Section -->
+                <div class="menu-section">
+                    <h3>Support</h3>
+                    <a href="support.html" class="menu-item">
+                        <span class="icon">💬</span>
+                        <span class="text">Support</span>
+                    </a>
+                    <a href="settings.html" class="menu-item">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Settings</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="user-avatar">SO</div>
+                <div class="user-info">
+                    <h4>Stanley Owusu</h4>
+                    <p>User</p>
+                </div>
+            </div>
+
+            <!-- Logout Section -->
+            <div class="menu-section">
+                <h3>Account</h3>
+                <a href="main.html" class="menu-item">
+                    <span class="icon">🚪</span>
+                    <span class="text">Log Out</span>
+                </a>
+            </div>
+
+        </aside>
+
+        <!-- ========================================
+             MAIN CONTENT AREA
+             ======================================== -->
+        <main class="main-content">
+            
+            <!-- Header -->
+            <header class="header">
+                <!-- Mobile Menu Button -->
+                <div class="header-actions">
+                    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <!-- Page Title -->
+                <div class="page-title">
+                    <h1>Buy Data</h1>
+                    <p>Purchase data bundles for all networks</p>
+                </div>
+
+                <!-- Header Actions -->
+                <div class="header-actions">
+                    <!-- Empty - for layout balance -->
+                </div>
+            </header>
+
+            <!-- ========================================
+                 WALLET BALANCE BANNER
+                 ======================================== -->
+            <section class="balance-banner">
+                <div class="balance-info">
+                    <h3>Wallet Balance</h3>
+                    <div class="balance-amount">
+                        <span id="walletBalance">₵0.00</span>
+                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                    </div>
+                </div>
+                <button class="fund-wallet-btn" onclick="showAlert('Fund wallet feature coming soon', 'info')">
+                    Fund Wallet
+                </button>
+            </section>
+
+            <!-- ========================================
+                 NETWORK SELECTION
+                 ======================================== -->
+            <section class="network-section">
+                <h3 class="section-title">Select Network</h3>
+                <div class="network-grid">
+                    <div class="network-card" onclick="selectNetwork('MTN')" role="button" tabindex="0">
+                        <div class="network-logo">📱</div>
+                        <div class="network-name">MTN</div>
+                    </div>
+                    <div class="network-card" onclick="selectNetwork('AirtelTigo')" role="button" tabindex="0">
+                        <div class="network-logo">📶</div>
+                        <div class="network-name">AirtelTigo</div>
+                    </div>
+                    <div class="network-card" onclick="selectNetwork('Glo')" role="button" tabindex="0">
+                        <div class="network-logo">🌐</div>
+                        <div class="network-name">Glo</div>
+                    </div>
+                    <div class="network-card" onclick="selectNetwork('Telecel')" role="button" tabindex="0">
+                        <div class="network-logo">📡</div>
+                        <div class="network-name">Telecel</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 DATA PLANS SECTION
+                 ======================================== -->
+            <section class="data-plans-section" id="dataPlansSection">
+                <h3 class="section-title">Select Data Plan</h3>
+                <div class="plans-grid" id="plansGrid">
+                    <!-- Plans will be loaded dynamically via JavaScript -->
+                </div>
+            </section>
+
+            <!-- ========================================
+                 PURCHASE FORM
+                 ======================================== -->
+            <section class="purchase-form" id="purchaseForm">
+                <h3 class="section-title">Purchase Details</h3>
+                
+                <!-- Phone Number Input -->
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="phoneNumber" 
+                        name="phoneNumber"
+                        placeholder="e.g., 0241234567" 
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        autocomplete="tel"
+                        aria-label="Phone number"
+                    >
+                </div>
+
+                <!-- Purchase Summary Card -->
+                <div class="summary-card">
+                    <h4 style="margin-bottom: 15px; color: #4CAF50;">Purchase Summary</h4>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Network:</span>
+                        <span class="summary-value" id="summaryNetwork">Not selected</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Data Plan:</span>
+                        <span class="summary-value" id="summaryPlan">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Phone Number:</span>
+                        <span class="summary-value" id="summaryPhone">-</span>
+                    </div>
+                    
+                    <div class="summary-item">
+                        <span class="summary-label">Validity:</span>
+                        <span class="summary-value" id="summaryValidity">-</span>
+                    </div>
+                    
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="summaryTotal">₵0.00</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    class="submit-btn" 
+                    onclick="purchaseData()"
+                    aria-label="Purchase data bundle"
+                >
+                    Purchase Data
+                </button>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ========================================
+         LOADING OVERLAY
+         ======================================== -->
+    <div class="loading-overlay" id="loadingOverlay" role="alert" aria-live="assertive">
+        <div class="loader"></div>
+        <div class="loading-text">Processing your purchase...</div>
+    </div>
+
+    <!-- ========================================
+         SUCCESS MODAL
+         ======================================== -->
+    <div class="success-modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+        <div class="success-content">
+            
+            <!-- Success Icon -->
+            <div class="success-icon" aria-hidden="true">✅</div>
+            
+            <!-- Success Message -->
+            <h2 id="successTitle">Purchase Successful!</h2>
+            <p>Your data bundle has been successfully activated</p>
+            
+            <!-- Transaction Details -->
+            <div class="success-details">
+                <div class="detail-row">
+                    <span>Network:</span>
+                    <strong id="successNetwork">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Data Plan:</span>
+                    <strong id="successPlan">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Phone:</span>
+                    <strong id="successPhone">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Amount:</span>
+                    <strong id="successAmount">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Transaction ID:</span>
+                    <strong id="successTxId">-</strong>
+                </div>
+            </div>
+            
+            <!-- Close Button -->
+            <button 
+                class="close-modal-btn" 
+                onclick="closeSuccessModal()"
+                aria-label="Close success modal"
+            >
+                Done
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JAVASCRIPT
+         ======================================== -->
+    <script src="data.js"></script>
+
+</body>
+</html>
