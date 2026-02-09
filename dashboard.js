@@ -236,6 +236,57 @@ function hideLoader() {
     }, 600); // matches fade-out transition
 }
 
+
+// ========================================
+// FETCH AND DISPLAY USER DATA
+// ========================================
+async function fetchUserProfile() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const response = await fetch('http://localhost:5000/api/auth/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile');
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+            const username = data.data.username || data.data.fullName.split(' ')[0];
+            
+            // Update header greeting
+            document.getElementById('headerGreeting').textContent = `Hi, ${username}!`;
+            
+            // Update sidebar username
+            document.getElementById('sidebarUsername').textContent = data.data.fullName;
+            
+            // Update user avatar initials
+            const initials = data.data.fullName
+                .split(' ')
+                .map(word => word[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+            document.querySelector('.user-avatar').textContent = initials;
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+        showAlert('⚠️ Failed to load user profile', 'warning', 4000);
+    }
+}
+
+// Call fetchUserProfile when page loads
+fetchUserProfile();
+
 // ========================================
 // QUICK TRANSFER FUNCTIONALITY
 // ========================================

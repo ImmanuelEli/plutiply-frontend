@@ -394,8 +394,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    localStorage.setItem('plutiply_token', data.data.token);
-                    localStorage.setItem('plutiply_user', JSON.stringify(data.data.user));
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
 
                     showMessage(`Welcome back, ${data.data.user.fullName}! 👋`, 'success');
 
@@ -485,8 +485,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    localStorage.setItem('plutiply_token', data.data.token);
-                    localStorage.setItem('plutiply_user', JSON.stringify(data.data.user));
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
 
                     showMessage('Account created successfully! 🎉', 'success');
 
@@ -509,8 +509,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Check if user is already logged in
-    const token = localStorage.getItem('plutiply_token');
-    const user = localStorage.getItem('plutiply_user');
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
     if (token && user) {
         console.log('User already logged in:', JSON.parse(user));
     }
