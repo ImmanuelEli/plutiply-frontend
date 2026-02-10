@@ -962,6 +962,67 @@ body {
     border-color: #f44336;
 }
 
+.recipient-amount-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(10, 14, 39, 0.6);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+}
+
+.recipient-amount-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.recipient-amount-input.error {
+    border-color: #f44336;
+}
+
+.recipient-amount-group {
+    margin-top: 12px;
+}
+
+.recipient-amount-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.recipient-amount-error {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.recipient-amount-error.show {
+    display: block;
+}
+
+.recipient-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recipient-phone-group,
+.recipient-network-group,
+.recipient-amount-group {
+    width: 100%;
+}
+
+.recipient-phone-group label,
+.recipient-network-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #aaa;
+    font-size: 14px;
+}
+
 .recipient-networks {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -1425,4 +1486,24 @@ body {
     .network-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(10, 14, 39, 0.6);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(76, 175, 80, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(76, 175, 80, 0.5);
 }

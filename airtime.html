@@ -46,7 +46,7 @@
                     </a>
                     <a href="#" class="menu-item">
                         <span class="icon">⚡</span>
-                        <span class="text">Electricity</span>
+                        <span class="text">Utilities</span>
                     </a>
                     <a href="#" class="menu-item">
                         <span class="icon">🎓</span>
@@ -150,7 +150,7 @@
             </div>
 
             <!-- Network Selection -->
-            <div class="network-section">
+            <div class="network-section" id="networkSection">
                 <h3 class="section-title">Select Network</h3>
                 <div class="network-grid" id="networkGrid">
                     <div class="network-card" data-network="MTN" tabindex="0" role="button">
@@ -205,10 +205,9 @@
                 <div id="bulkModeFields" class="recipients-container">
                     <div class="form-group">
                         <label>Amount per recipient (₵)</label>
-                        <input type="number" id="bulkAmount" placeholder="Enter amount for all recipients" min="1"
-                            step="1">
+                        <input type="number" id="bulkAmount" placeholder="Enter amount for all recipients" min="1" step="1">
                         <span class="error-message" id="bulkAmountError">Please enter a valid amount</span>
-
+                        
                         <div class="quick-amounts">
                             <button class="amount-btn bulk-amount-btn" data-amount="5">₵5</button>
                             <button class="amount-btn bulk-amount-btn" data-amount="10">₵10</button>
@@ -231,7 +230,7 @@
                 <!-- Purchase Summary -->
                 <div class="summary-card">
                     <h4 style="margin-bottom: 15px; color: #4CAF50;">Purchase Summary</h4>
-                    <div class="summary-item">
+                    <div class="summary-item" id="summaryNetworkRow">
                         <span class="summary-label">Network:</span>
                         <span class="summary-value" id="summaryNetwork">Not selected</span>
                     </div>
@@ -239,17 +238,16 @@
                         <span class="summary-label">Phone Number:</span>
                         <span class="summary-value" id="summaryPhone">-</span>
                     </div>
-                    <div class="summary-item" id="summaryRecipientsRow" style="display: none;">
-                        <span class="summary-label">Recipients:</span>
-                        <span class="summary-value" id="summaryRecipients">0</span>
-                    </div>
-                    <div id="summaryNetworkBreakdown" style="display: none;">
-                        <!-- Network breakdown will be inserted here -->
-                    </div>
-                    <div class="summary-item">
+                    <div class="summary-item" id="summaryAmountRow">
                         <span class="summary-label">Amount:</span>
                         <span class="summary-value" id="summaryAmount">₵0.00</span>
                     </div>
+                    
+                    <!-- Bulk Mode Recipients Breakdown -->
+                    <div id="summaryRecipientsBreakdown" style="display: none;">
+                        <!-- Individual recipients will be listed here -->
+                    </div>
+                    
                     <div class="summary-item total">
                         <span>Total:</span>
                         <span id="summaryTotal">₵0.00</span>

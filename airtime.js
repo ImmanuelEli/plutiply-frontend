@@ -77,7 +77,7 @@ let purchaseMode = 'single'; // 'single' or 'bulk'
 let recipientCount = 0;
 let isProcessing = false;
 let balanceVisible = true;
-const actualBalance = 54812.00;
+const actualBalance = 0.00;
 
 // ========================================
 // NOTIFICATION SYSTEM (Wallet Style)
@@ -343,7 +343,7 @@ function setupEventListeners() {
 
     // Quick amount buttons - Bulk mode
     document.querySelectorAll('.bulk-amount-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             setAmount(this.dataset.amount, 'bulk');
         });
     });
@@ -352,10 +352,6 @@ function setupEventListeners() {
     document.getElementById('phoneNumber').addEventListener('input', handlePhoneInput);
     document.getElementById('amount').addEventListener('input', () => {
         clearQuickAmountSelection('single');
-        updateSummary();
-    });
-    document.getElementById('bulkAmount').addEventListener('input', () => {
-        clearQuickAmountSelection('bulk');
         updateSummary();
     });
 
@@ -457,11 +453,12 @@ function switchMode(mode) {
     // Show/hide appropriate fields
     document.getElementById('singleModeFields').style.display = mode === 'single' ? 'block' : 'none';
     document.getElementById('bulkModeFields').classList.toggle('active', mode === 'bulk');
-
+    
     // Update summary visibility
+    document.getElementById('summaryNetworkRow').style.display = mode === 'single' ? 'flex' : 'none';
     document.getElementById('summaryPhoneRow').style.display = mode === 'single' ? 'flex' : 'none';
     document.getElementById('summaryRecipientsRow').style.display = mode === 'bulk' ? 'flex' : 'none';
-
+    
     updateSummary();
 }
 
@@ -493,7 +490,7 @@ function setAmount(amount, mode) {
         });
     } else {
         document.getElementById('bulkAmount').value = amount;
-
+        
         // Update button states
         document.querySelectorAll('.bulk-amount-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.amount === amount);
@@ -507,10 +504,6 @@ function setAmount(amount, mode) {
 function clearQuickAmountSelection(mode) {
     if (mode === 'single') {
         document.querySelectorAll('#quickAmounts .amount-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-    } else {
-        document.querySelectorAll('.bulk-amount-btn').forEach(btn => {
             btn.classList.remove('active');
         });
     }
@@ -570,6 +563,11 @@ function addRecipient() {
                     <button class="recipient-network-btn" data-network="Telecel">Telecel</button>
                 </div>
             </div>
+            <div class="recipient-amount-group">
+                <label>Amount (₵)</label>
+                <input type="number" class="recipient-amount-input" placeholder="Enter amount" min="1" step="1">
+                <span class="error-message recipient-amount-error">Please enter a valid amount</span>
+            </div>
         </div>
     `;
 
@@ -593,7 +591,7 @@ function addRecipient() {
 
         updateSummary();
     });
-
+    
     // Network selection
     recipientItem.querySelectorAll('.recipient-network-btn').forEach(btn => {
         btn.addEventListener('click', function () {
@@ -651,41 +649,40 @@ function updateSingleSummary() {
 
 // Update bulk mode summary
 function updateBulkSummary() {
-    const amount = parseFloat(document.getElementById('bulkAmount').value) || 0;
     const recipientItems = document.querySelectorAll('.recipient-item');
-
+    
     // Count valid recipients
     let validCount = 0;
     const networkCounts = {};
-
+    
     recipientItems.forEach(item => {
         const phone = item.querySelector('.recipient-phone-input').value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-
+        
         if (phone !== '' && selectedNetworkBtn && validatePhone(phone)) {
             validCount++;
             const network = selectedNetworkBtn.dataset.network;
             networkCounts[network] = (networkCounts[network] || 0) + 1;
         }
     });
-
+    
     const totalCost = amount * validCount;
-
+    
     document.getElementById('summaryRecipients').textContent = validCount;
     document.getElementById('summaryAmount').textContent = `₵${amount.toFixed(2)} × ${validCount}`;
     document.getElementById('summaryTotal').textContent = `₵${totalCost.toFixed(2)}`;
-
+    
     // Show network breakdown if there are multiple networks
     const breakdownDiv = document.getElementById('summaryNetworkBreakdown');
     if (Object.keys(networkCounts).length > 1) {
         breakdownDiv.style.display = 'block';
         breakdownDiv.innerHTML = '<div style="margin: 10px 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">';
-
+        
         Object.entries(networkCounts).forEach(([network, count]) => {
             breakdownDiv.innerHTML += `
-                <div class="summary-item" style="font-size: 13px; margin: 5px 0;">
-                    <span class="summary-label">${network}:</span>
-                    <span class="summary-value">${count} recipient(s)</span>
+                <div class="summary-item" style="font-size: 13px; margin: 5px 0; padding: 5px 0;">
+                    <span class="summary-label">${recipient.index}. ${recipient.phone} (${recipient.network}):</span>
+                    <span class="summary-value">₵${recipient.amount.toFixed(2)}</span>
                 </div>
             `;
         });
@@ -694,6 +691,8 @@ function updateBulkSummary() {
     } else {
         breakdownDiv.style.display = 'none';
     }
+    
+    document.getElementById('summaryTotal').textContent = `₵${totalCost.toFixed(2)}`;
 }
 
 // Validate single purchase
@@ -752,12 +751,12 @@ function validateSinglePurchase() {
 // Validate bulk purchase
 function validateBulkPurchase() {
     let isValid = true;
-
+    
     // Validate amount
     const amount = parseFloat(document.getElementById('bulkAmount').value);
     const amountError = document.getElementById('bulkAmountError');
     const amountInput = document.getElementById('bulkAmount');
-
+    
     if (!amount || amount < MIN_AMOUNT) {
         amountError.textContent = `Amount must be at least ₵${MIN_AMOUNT}`;
         amountError.classList.add('show');
@@ -767,21 +766,22 @@ function validateBulkPurchase() {
         amountError.classList.remove('show');
         amountInput.classList.remove('error');
     }
-
+    
     // Validate recipients
     const recipientItems = document.querySelectorAll('.recipient-item');
     const validRecipients = [];
     const duplicates = [];
     const invalidRecipients = [];
     const missingNetworkRecipients = [];
+    const missingAmountRecipients = [];
     const phoneNumbers = new Set();
-
+    
     recipientItems.forEach((item, index) => {
         const phoneInput = item.querySelector('.recipient-phone-input');
         const phoneError = item.querySelector('.recipient-error');
         const phone = phoneInput.value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-
+        
         // Skip empty recipients
         if (phone === '' && !selectedNetworkBtn) {
             return;
@@ -814,15 +814,17 @@ function validateBulkPurchase() {
             isValid = false;
             return;
         }
-
+        
         validRecipients.push({
             phone: phone,
-            network: selectedNetworkBtn.dataset.network
+            network: selectedNetworkBtn.dataset.network,
+            amount: amount
         });
+        totalCost += amount;
     });
 
     if (validRecipients.length === 0) {
-        showAlert('Please add at least one recipient with phone number and network', 'error');
+        showAlert('Please add at least one recipient with phone number, network, and amount', 'error');
         return false;
     }
 
@@ -840,13 +842,9 @@ function validateBulkPurchase() {
         showAlert(`Please select a network for recipient ${missingNetworkRecipients.join(', ')}`, 'error');
         return false;
     }
-
+    
     // Check total cost against balance
-    const totalCost = amount * validRecipients.length;
     if (totalCost > WALLET_BALANCE) {
-        document.getElementById('bulkAmountError').classList.add('show');
-        document.getElementById('bulkAmountError').textContent = `Total cost (₵${totalCost.toFixed(2)}) exceeds wallet balance`;
-        document.getElementById('bulkAmount').classList.add('error');
         showAlert(`Total cost (₵${totalCost.toFixed(2)}) exceeds wallet balance`, 'error');
         isValid = false;
     }
@@ -932,19 +930,22 @@ function showSingleSuccess() {
 
 // Show bulk purchase success
 function showBulkSuccess() {
-    const amount = parseFloat(document.getElementById('bulkAmount').value);
     const recipientItems = document.querySelectorAll('.recipient-item');
 
     const validRecipients = [];
+    let totalAmount = 0;
+    
     recipientItems.forEach(item => {
         const phone = item.querySelector('.recipient-phone-input').value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-
+        
         if (phone !== '' && selectedNetworkBtn && validatePhone(phone)) {
             validRecipients.push({
                 phone: phone,
-                network: selectedNetworkBtn.dataset.network
+                network: selectedNetworkBtn.dataset.network,
+                amount: amount
             });
+            totalAmount += amount;
         }
     });
 
@@ -964,7 +965,7 @@ function showBulkSuccess() {
         item.innerHTML = `
             <div class="detail-row">
                 <span>${index + 1}. ${recipient.phone}</span>
-                <strong>₵${amount.toFixed(2)}</strong>
+                <strong>₵${recipient.amount.toFixed(2)}</strong>
             </div>
             <div class="detail-row">
                 <span>Network: ${recipient.network}</span>
@@ -978,7 +979,7 @@ function showBulkSuccess() {
 
     // Add notification
     addNotification('success', 'Bulk Purchase Successful', `Airtime sent to ${validRecipients.length} recipients`);
-
+    
     // Show success alert
     showAlert(`✓ Airtime sent to ${validRecipients.length} recipients`, 'success', 3000);
 
@@ -1003,7 +1004,7 @@ function resetForm() {
     document.getElementById('phoneNumber').value = '';
     document.getElementById('amount').value = '';
     document.getElementById('bulkAmount').value = '';
-
+    
     // Clear errors
     document.querySelectorAll('.error-message').forEach(error => error.classList.remove('show'));
     document.querySelectorAll('.error').forEach(input => input.classList.remove('error'));
@@ -1026,10 +1027,9 @@ function resetForm() {
     // Reset summary display
     document.getElementById('summaryNetwork').textContent = 'Not selected';
     document.getElementById('summaryPhone').textContent = '-';
-    document.getElementById('summaryRecipients').textContent = '0';
     document.getElementById('summaryAmount').textContent = '₵0.00';
     document.getElementById('summaryTotal').textContent = '₵0.00';
     document.getElementById('summaryNetworkBreakdown').style.display = 'none';
-
+    
     updateSummary();
 }

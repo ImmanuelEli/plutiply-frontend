@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutiply - Utilities</title>
+    <link rel="stylesheet" href="utilities.css">
+</head>
+<body>
+    
+    <!-- Page Loader -->
+    <div class="loader-overlay" id="loader">
+        <div class="loader-circle-50"></div>
+    </div>
+
+    <div class="dashboard">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Notification Button - Fixed at top right -->
+        <button class="icon-btn notification-btn" id="notificationBtn" onclick="toggleNotifications()">🔔</button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <h2>Plutiply</h2>
+                <p>Your Reliable Digital Transaction Partner</p>
+            </div>
+
+            <nav>
+                <div class="menu-section">
+                    <a href="dashboard.html" class="menu-item">
+                        <span class="icon">🏠</span>
+                        <span class="text">Dashboard</span>
+                    </a>
+                    <a href="mywallet.html" class="menu-item">
+                        <span class="icon">💰</span>
+                        <span class="text">My Wallet</span>
+                    </a>
+                    <a href="airtime.html" class="menu-item">
+                        <span class="icon">📱</span>
+                        <span class="text">Buy Airtime</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📊</span>
+                        <span class="text">Buy Data</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📺</span>
+                        <span class="text">Cable TV</span>
+                    </a>
+                    <a href="utilities.html" class="menu-item active">
+                        <span class="icon">⚡</span>
+                        <span class="text">Utilities</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">🎓</span>
+                        <span class="text">Exam Vouchers</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Analytics</h3>
+                    <a href="#" class="menu-item">
+                        <span class="icon">📈</span>
+                        <span class="text">Statistics</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">🎁</span>
+                        <span class="text">Referrals</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Support</h3>
+                    <a href="#" class="menu-item">
+                        <span class="icon">💬</span>
+                        <span class="text">Support</span>
+                    </a>
+                    <a href="#" class="menu-item">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Settings</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">SO</div>
+                <div class="user-info">
+                    <h4>Stanley Owusu</h4>
+                    <p>User</p>
+                </div>
+            </div>
+            <div class="menu-section">
+                <h3>Log-Out</h3>
+                <a href="index.html" class="menu-item">
+                    <span>🚪</span>
+                    <span>Log-Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-actions">
+                    <button class="hamburger" id="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                <div class="page-title">
+                    <h1>Utilities</h1>
+                    <p>Pay your electricity and water bills</p>
+                </div>
+
+                <div class="header-actions">
+                    <!-- Empty - for layout balance -->
+                </div>
+            </header>
+
+            <!-- Notification Panel will be dynamically created -->
+             
+            <!-- Wallet Balance Summary -->
+            <div class="balance-banner">
+                <div class="balance-info">
+                    <h3>Wallet Balance</h3>
+                    <div class="balance-amount">
+                        <span id="walletBalance">₵0.00</span>
+                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                    </div>
+                </div>
+                <button class="fund-wallet-btn" id="fundWalletBtn">Fund Wallet</button>
+            </div>
+
+            <!-- Utility Service Cards -->
+            <div class="utility-cards">
+                <div class="utility-card" onclick="openElectricityModal()">
+                    <div class="utility-icon electricity">⚡</div>
+                    <div class="utility-info">
+                        <h3>Electricity Bills</h3>
+                        <p>ECG, NEDCo prepaid & postpaid</p>
+                    </div>
+                    <div class="utility-arrow">→</div>
+                </div>
+
+                <div class="utility-card" onclick="openWaterModal()">
+                    <div class="utility-icon water">💧</div>
+                    <div class="utility-info">
+                        <h3>Water Bills</h3>
+                        <p>Ghana Water Company</p>
+                    </div>
+                    <div class="utility-arrow">→</div>
+                </div>
+
+                <!-- Waste Management Card - Temporarily Removed -->
+                <!-- See WASTE_MANAGEMENT_IMPLEMENTATION.md for restoration guide -->
+            </div>
+
+            <!-- Saved Beneficiaries -->
+            <div class="beneficiaries-section">
+                <div class="section-header">
+                    <h2>Saved Beneficiaries</h2>
+                    
+                </div>
+
+                <div class="beneficiary-list" id="beneficiaryList">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <p>No saved beneficiaries yet</p>
+                        <span>Make a payment to save beneficiary details</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="transaction-section">
+                <div class="section-header">
+                    <h2>Recent Utility Payments</h2>
+                   
+                </div>
+
+                <div class="transaction-filters">
+                    <button class="filter-btn active" onclick="filterTransactions('all')">All</button>
+                    <button class="filter-btn" onclick="filterTransactions('electricity')">Electricity</button>
+                    <button class="filter-btn" onclick="filterTransactions('water')">Water</button>
+                    <!-- <button class="filter-btn" onclick="filterTransactions('waste')">Waste</button> -->
+                </div>
+
+                <div class="transaction-list" id="transactionList">
+                    <div class="empty-state">
+                        <div class="empty-icon">💳</div>
+                        <p>No transactions yet</p>
+                        <span>Your utility payments will appear here</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Electricity Bill Modal -->
+    <div id="electricityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚡ Pay Electricity Bill</h2>
+                <button class="close-btn" onclick="closeElectricityModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Service Provider</label>
+                    <select id="electricityProvider" class="form-input" onchange="updateElectricityType()">
+                        <option value="">Select Provider</option>
+                        <option value="ecg">Electricity Company of Ghana (ECG)</option>
+                        <option value="nedco">Northern Electricity Distribution Company (NEDCo)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="electricityTypeGroup" style="display: none;">
+                    <label>Payment Type</label>
+                    <div class="payment-type-selector">
+                        <button class="type-btn" onclick="selectElectricityType('prepaid')">
+                            <span class="type-icon">🔌</span>
+                            <span class="type-name">Prepaid</span>
+                        </button>
+                        <button class="type-btn" onclick="selectElectricityType('postpaid')">
+                            <span class="type-icon">📄</span>
+                            <span class="type-name">Postpaid</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="meterNumberGroup" style="display: none;">
+                    <label id="meterNumberLabel">Meter Number</label>
+                    <input type="text" id="electricityMeterNumber" class="form-input" placeholder="Enter meter number" oninput="validateMeterNumber()">
+                    <div class="input-hint" id="meterNumberHint"></div>
+                </div>
+
+                <div class="form-group" id="electricityAmountGroup" style="display: none;">
+                    <label>Amount (₵)</label>
+                    <input type="number" id="electricityAmount" class="form-input" placeholder="Enter amount" min="1">
+                    <div class="quick-amounts">
+                        <button class="quick-amount-btn" onclick="setElectricityAmount(20)">₵20</button>
+                        <button class="quick-amount-btn" onclick="setElectricityAmount(50)">₵50</button>
+                        <button class="quick-amount-btn" onclick="setElectricityAmount(100)">₵100</button>
+                        <button class="quick-amount-btn" onclick="setElectricityAmount(200)">₵200</button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="electricityPhoneGroup" style="display: none;">
+                    <label>Phone Number (for receipt)</label>
+                    <input type="tel" id="electricityPhone" class="form-input" placeholder="0XX XXX XXXX">
+                </div>
+
+                <div class="save-beneficiary" id="saveBeneficiaryCheckbox" style="display: none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="saveElectricityBeneficiary">
+                        <span>Save as beneficiary for quick payments</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeElectricityModal()">Cancel</button>
+                <button class="submit-btn" onclick="processElectricityPayment()">Pay Bill</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Water Bill Modal -->
+    <div id="waterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💧 Pay Water Bill</h2>
+                <button class="close-btn" onclick="closeWaterModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Service Provider</label>
+                    <select id="waterProvider" class="form-input" onchange="updateWaterFields()">
+                        <option value="">Select Provider</option>
+                        <option value="gwcl">Ghana Water Company Limited (GWCL)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="waterAccountGroup" style="display: none;">
+                    <label>Account Number</label>
+                    <input type="text" id="waterAccountNumber" class="form-input" placeholder="Enter account number">
+                </div>
+
+                <div class="form-group" id="waterRegionGroup" style="display: none;">
+                    <label>Region</label>
+                    <select id="waterRegion" class="form-input">
+                        <option value="">Select Region</option>
+                        <option value="greater-accra">Greater Accra</option>
+                        <option value="ashanti">Ashanti</option>
+                        <option value="central">Central</option>
+                        <option value="eastern">Eastern</option>
+                        <option value="western">Western</option>
+                        <option value="northern">Northern</option>
+                        <option value="upper-east">Upper East</option>
+                        <option value="upper-west">Upper West</option>
+                        <option value="volta">Volta</option>
+                        <option value="bono">Bono</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="waterAmountGroup" style="display: none;">
+                    <label>Amount (₵)</label>
+                    <input type="number" id="waterAmount" class="form-input" placeholder="Enter amount" min="1">
+                    <div class="quick-amounts">
+                        <button class="quick-amount-btn" onclick="setWaterAmount(30)">₵30</button>
+                        <button class="quick-amount-btn" onclick="setWaterAmount(50)">₵50</button>
+                        <button class="quick-amount-btn" onclick="setWaterAmount(100)">₵100</button>
+                        <button class="quick-amount-btn" onclick="setWaterAmount(150)">₵150</button>
+                    </div>
+                </div>
+
+                <div class="form-group" id="waterPhoneGroup" style="display: none;">
+                    <label>Phone Number (for receipt)</label>
+                    <input type="tel" id="waterPhone" class="form-input" placeholder="0XX XXX XXXX">
+                </div>
+
+                <div class="save-beneficiary" id="saveWaterBeneficiaryCheckbox" style="display: none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="saveWaterBeneficiary">
+                        <span>Save as beneficiary for quick payments</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeWaterModal()">Cancel</button>
+                <button class="submit-btn" onclick="processWaterPayment()">Pay Bill</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Waste Management Modal
+    <div id="wasteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🗑️ Pay Waste Bill</h2>
+                <button class="close-btn" onclick="closeWasteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Service Provider</label>
+                    <select id="wasteProvider" class="form-input" onchange="updateWasteFields()">
+                        <option value="">Select Provider</option>
+                        <option value="zoomlion">Zoomlion Ghana Limited</option>
+                        <option value="jekora">Jekora Ventures</option>
+                        <option value="city-waste">City Waste Management</option>
+                        <option value="other">Other Provider</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="wasteAccountGroup" style="display: none;">
+                    <label>Account/Customer Number</label>
+                    <input type="text" id="wasteAccountNumber" class="form-input" placeholder="Enter account number">
+                </div>
+
+                <div class="form-group" id="wasteLocationGroup" style="display: none;">
+                    <label>Location/Area</label>
+                    <input type="text" id="wasteLocation" class="form-input" placeholder="e.g., East Legon, Plot 23">
+                </div>
+
+                <div class="form-group" id="wastePlanGroup" style="display: none;">
+                    <label>Service Plan</label>
+                    <select id="wastePlan" class="form-input" onchange="updateWasteAmount()">
+                        <option value="">Select Plan</option>
+                        <option value="weekly" data-amount="40">Weekly Collection - ₵40/month</option>
+                        <option value="biweekly" data-amount="25">Bi-Weekly Collection - ₵25/month</option>
+                        <option value="monthly" data-amount="60">Monthly Bulk Collection - ₵60/month</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="wasteAmountGroup" style="display: none;">
+                    <label>Amount (₵)</label>
+                    <input type="number" id="wasteAmount" class="form-input" placeholder="Enter amount" min="1" readonly>
+                </div>
+
+                <div class="form-group" id="wastePhoneGroup" style="display: none;">
+                    <label>Phone Number (for receipt)</label>
+                    <input type="tel" id="wastePhone" class="form-input" placeholder="0XX XXX XXXX">
+                </div>
+
+                <div class="save-beneficiary" id="saveWasteBeneficiaryCheckbox" style="display: none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="saveWasteBeneficiary">
+                        <span>Save as beneficiary for quick payments</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeWasteModal()">Cancel</button>
+                <button class="submit-btn" onclick="processWastePayment()">Pay Bill</button>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Cedi Loader -->
+    <div id="cediLoader" class="cedi-loader-overlay">
+        <div class="cedi-loader">
+            <div class="cedi-symbol">₵</div>
+            <div class="loader-text" id="loaderText">Processing Payment...</div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div class="alert-container" id="alertContainer"></div>
+
+    <!-- Notification Panel will be dynamically created -->
+
+    <script src="utilities.js"></script>
+</body>
+</html>
