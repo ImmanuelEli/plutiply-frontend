@@ -517,9 +517,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Google Sign-In (Placeholder)
+// Google Sign-In
 function googleSignIn() {
-
+    // Redirect directly (no popup)
+    window.location.href = `${API_URL}/auth/google`;
 }
 
 

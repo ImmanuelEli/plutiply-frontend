@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plutiply - My Wallet</title>
     <link rel="stylesheet" href="walletstyle.css">
 </head>
+
 <body>
-    
+
     <div class="loader-overlay" id="loader">
-    <div class="loader-circle-50"></div>
+        <div class="loader-circle-50"></div>
     </div>
 
     <div class="dashboard">
@@ -23,15 +25,15 @@
 
             <nav>
                 <div class="menu-section">
-                    <a href="DASHBOARD/dashboard.html" class="menu-item">
+                    <a href="dashboard.html" class="menu-item">
                         <span class="icon">🏠</span>
                         <span class="text">Dashboard</span>
                     </a>
-                    <a href="WALLET/mywallet.html" class="menu-item active">
+                    <a href="mywallet.html" class="menu-item active">
                         <span class="icon">💰</span>
                         <span class="text">My Wallet</span>
                     </a>
-                    <a href="AIRTIME/airtime.html" class="menu-item">
+                    <a href="airtime.html" class="menu-item">
                         <span class="icon">📱</span>
                         <span class="text">Buy Airtime</span>
                     </a>
@@ -75,422 +77,426 @@
                         <span class="icon">⚙️</span>
                         <span class="text">Settings</span>
                     </a>
-                    
+
                 </div>
             </nav>
 
             <div class="user-profile">
-                <div class="user-avatar">SO</div>
+                <div class="user-avatar" id="sidebarAvatar">SO</div>
                 <div class="user-info">
-                    <h4>Stanley Owusu</h4>
+                    <h4 id="sidebarUsername">Loading...</h4>
                     <p>User</p>
                 </div>
             </div>
-            <div class="menu-section">
-                            <h3>Log-Out</h3>
-                            <a href="MAINPAGE/index.html" class="menu-item">
-                                <span>🚪</span>
-                                <span>Log-Out</span>
-                            </a>
+    </div>
+    <div class="menu-section">
+        <h3>Log-Out</h3>
+        <a href="index.html" class="menu-item">
+            <span>🚪</span>
+            <span>Log-Out</span>
+        </a>
 
-                        </div>
+    </div>
 
-        </aside>
+    </aside>
 
-        <main class="main-content">
-            <header class="header">
-                <div class="header-actions">
-                    <button class="hamburger" id="hamburger">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+    <main class="main-content">
+        <header class="header">
+            <div class="header-actions">
+                <button class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="page-title">
+                <h1>My Wallet</h1>
+                <p>Manage your funds and transactions</p>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn notification-btn">🔔</button>
+            </div>
+            <div class="header-actions">
+                <!-- Empty - for layout balance -->
+            </div>
+        </header>
+
+        <!-- Wallet Balance Card -->
+        <div class="balance-card">
+            <div class="balance-content">
+                <div class="balance-label">Total Balance</div>
+                <div class="balance-amount">
+                    <span id="balanceDisplay">₵0.00</span>
+                    <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                </div>
+                <div class="wallet-actions">
+                    <button class="wallet-btn primary" onclick="openFundModal()">
+                        ➕ Fund Wallet
+                    </button>
+                    <button class="wallet-btn" onclick="openWithdrawModal()">
+                        ⬇️ Withdraw
+                    </button>
+                    <button class="wallet-btn">
+                        📊 Statement
                     </button>
                 </div>
-                <div class="page-title">
-                    <h1>My Wallet</h1>
-                    <p>Manage your funds and transactions</p>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn notification-btn">🔔</button>
-                </div>
-                <div class="header-actions">
-                    <!-- Empty - for layout balance -->
-                </div>
-            </header>
+            </div>
+        </div>
 
-            <!-- Wallet Balance Card -->
-            <div class="balance-card">
-                <div class="balance-content">
-                    <div class="balance-label">Total Balance</div>
-                    <div class="balance-amount">
-                        <span id="balanceDisplay">₵0.00</span>
-                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="openAirtimeModal()">
+                <div class="action-icon">📱</div>
+                <h3>Buy Airtime</h3>
+                <p>Quick airtime purchase</p>
+            </div>
+            <div class="action-card" onclick="openDataModal()">
+                <div class="action-icon">📊</div>
+                <h3>Buy Data</h3>
+                <p>Purchase data bundles</p>
+            </div>
+            <div class="action-card" onclick="openTransferModal()">
+                <div class="action-icon">↔️</div>
+                <h3>Transfer Money</h3>
+                <p>Send to friends</p>
+            </div>
+            <div class="action-card" onclick="openBillsModal()">
+                <div class="action-icon">💳</div>
+                <h3>Pay Bills</h3>
+                <p>Electricity, Cable TV, Water Bill</p>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="transaction-section">
+            <div class="section-header">
+                <h2>Recent Transactions</h2>
+                <button class="icon-btn">⋯</button>
+            </div>
+
+            <div class="transaction-filters">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Credit</button>
+                <button class="filter-btn">Debit</button>
+                <button class="filter-btn">Pending</button>
+            </div>
+
+            <div class="transaction-list">
+                <div class="transaction-item">
+                    <div class="transaction-icon credit">⬇️</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Wallet Funded</div>
+                        <div class="transaction-meta">Jan 20, 2026 • 14:35 PM • Paystack</div>
                     </div>
-                    <div class="wallet-actions">
-                        <button class="wallet-btn primary" onclick="openFundModal()">
-                            ➕ Fund Wallet
-                        </button>
-                        <button class="wallet-btn" onclick="openWithdrawModal()">
-                            ⬇️ Withdraw
-                        </button>
-                        <button class="wallet-btn">
-                            📊 Statement
-                        </button>
+                    <div>
+                        <div class="transaction-amount credit">+₵5,000.00</div>
+                        <span class="transaction-status status-completed">Completed</span>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-icon debit">📱</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">MTN Airtime Purchase</div>
+                        <div class="transaction-meta">Jan 20, 2026 • 12:20 PM • 0241234567</div>
+                    </div>
+                    <div>
+                        <div class="transaction-amount debit">-₵50.00</div>
+                        <span class="transaction-status status-completed">Completed</span>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-icon debit">📊</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">AirtelTigo Data Bundle</div>
+                        <div class="transaction-meta">Jan 19, 2026 • 18:45 PM • 5GB Bundle</div>
+                    </div>
+                    <div>
+                        <div class="transaction-amount debit">-₵35.00</div>
+                        <span class="transaction-status status-completed">Completed</span>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-icon debit">👤</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Transfer to John Mensah</div>
+                        <div class="transaction-meta">Jan 19, 2026 • 10:15 AM • P2P Transfer</div>
+                    </div>
+                    <div>
+                        <div class="transaction-amount debit">-₵500.00</div>
+                        <span class="transaction-status status-completed">Completed</span>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-icon debit">⚡</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Electricity Bill Payment</div>
+                        <div class="transaction-meta">Jan 18, 2026 • 16:30 PM • ECG</div>
+                    </div>
+                    <div>
+                        <div class="transaction-amount debit">-₵150.00</div>
+                        <span class="transaction-status status-pending">Pending</span>
+                    </div>
+                </div>
+
+                <div class="transaction-item">
+                    <div class="transaction-icon credit">🎁</div>
+                    <div class="transaction-details">
+                        <div class="transaction-title">Referral Bonus</div>
+                        <div class="transaction-meta">Jan 18, 2026 • 09:00 AM • From Ama Osei</div>
+                    </div>
+                    <div>
+                        <div class="transaction-amount credit">+₵20.00</div>
+                        <span class="transaction-status status-completed">Completed</span>
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <div class="action-card" onclick="openAirtimeModal()">   
-                    <div class="action-icon">📱</div>
-                    <h3>Buy Airtime</h3>
-                    <p>Quick airtime purchase</p>
-                </div>
-                <div class="action-card" onclick="openDataModal()">
-                    <div class="action-icon">📊</div>
-                    <h3>Buy Data</h3>
-                    <p>Purchase data bundles</p>
-                </div>
-                <div class="action-card" onclick="openTransferModal()">
-                    <div class="action-icon">↔️</div>
-                    <h3>Transfer Money</h3>
-                    <p>Send to friends</p>
-                </div>
-                <div class="action-card" onclick="openBillsModal()">
-                    <div class="action-icon">💳</div>
-                    <h3>Pay Bills</h3>
-                    <p>Electricity, Cable TV, Water Bill</p>
-                </div>
-            </div>
-
-            <!-- Transaction History -->
-            <div class="transaction-section">
-                <div class="section-header">
-                    <h2>Recent Transactions</h2>
-                    <button class="icon-btn">⋯</button>
-                </div>
-
-                <div class="transaction-filters">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Credit</button>
-                    <button class="filter-btn">Debit</button>
-                    <button class="filter-btn">Pending</button>
-                </div>
-
-                <div class="transaction-list">
-                    <div class="transaction-item">
-                        <div class="transaction-icon credit">⬇️</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">Wallet Funded</div>
-                            <div class="transaction-meta">Jan 20, 2026 • 14:35 PM • Paystack</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount credit">+₵5,000.00</div>
-                            <span class="transaction-status status-completed">Completed</span>
-                        </div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-icon debit">📱</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">MTN Airtime Purchase</div>
-                            <div class="transaction-meta">Jan 20, 2026 • 12:20 PM • 0241234567</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount debit">-₵50.00</div>
-                            <span class="transaction-status status-completed">Completed</span>
-                        </div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-icon debit">📊</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">AirtelTigo Data Bundle</div>
-                            <div class="transaction-meta">Jan 19, 2026 • 18:45 PM • 5GB Bundle</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount debit">-₵35.00</div>
-                            <span class="transaction-status status-completed">Completed</span>
-                        </div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-icon debit">👤</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">Transfer to John Mensah</div>
-                            <div class="transaction-meta">Jan 19, 2026 • 10:15 AM • P2P Transfer</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount debit">-₵500.00</div>
-                            <span class="transaction-status status-completed">Completed</span>
-                        </div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-icon debit">⚡</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">Electricity Bill Payment</div>
-                            <div class="transaction-meta">Jan 18, 2026 • 16:30 PM • ECG</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount debit">-₵150.00</div>
-                            <span class="transaction-status status-pending">Pending</span>
-                        </div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="transaction-icon credit">🎁</div>
-                        <div class="transaction-details">
-                            <div class="transaction-title">Referral Bonus</div>
-                            <div class="transaction-meta">Jan 18, 2026 • 09:00 AM • From Ama Osei</div>
-                        </div>
-                        <div>
-                            <div class="transaction-amount credit">+₵20.00</div>
-                            <span class="transaction-status status-completed">Completed</span>
-                        </div>
-                    </div>  
-                </div>
-            </div>
-        </main>
+        </div>
+    </main>
     </div>
-                <!-- Fund Wallet Modal -->
-                <div class="modal" id="fundModal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h2>Fund Wallet</h2>
-                            <button class="close-modal" onclick="closeFundModal()">×</button>
-                        </div>
+    <!-- Fund Wallet Modal -->
+    <div class="modal" id="fundModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Fund Wallet</h2>
+                <button class="close-modal" onclick="closeFundModal()">×</button>
+            </div>
 
-                        <div class="payment-section" style="padding: 0; background: transparent;">
-                            <h3 style="margin-bottom: 20px; font-size: 16px;">Select Payment Method</h3>
-                            <div class="payment-methods">
-                                <div class="payment-method selected" onclick="selectPaymentMethod(this)">
-                                    <div class="method-header">
-                                        <div class="method-icon">💳</div>
-                                        <div class="method-info">
-                                            <h4>Debit/Credit Card</h4>
-                                            <p>Paystack</p>
-                                        </div>
-                                    </div>
-                                    <div class="method-details">Instant funding • All cards accepted</div>
-                                </div>
-
-                                <div class="payment-method" onclick="selectPaymentMethod(this)">
-                                    <div class="method-header">
-                                        <div class="method-icon">📱</div>
-                                        <div class="method-info">
-                                            <h4>Mobile Money</h4>
-                                            <p>MTN, Vodafone, AirtelTigo</p>
-                                        </div>
-                                    </div>
-                                    <div class="method-details">Instant funding • All networks</div>
-                                </div>
-
-
-                                </div>
-
-                                <div class="fund-form">
-                                    <div class="form-group">
-                                        <label>Amount (₵)</label>
-                                        <input type="number" placeholder="Enter amount" min="10" id="fundAmount">
-                                    </div>
-                                    <div class="form-group" id="phoneNumberField" style="display: none;">
-                                        <label>Phone Number</label>
-                                        <input type="tel" id="fundPhoneNumber" placeholder="0XX XXX XXXX">
-                                    </div>
-
-                                    <div class="form-group" id="cardFields">
-                                        <label>Card Number</label>
-                                        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19">
-                                    </div>
-
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="cardExtraFields">
-                                        <div class="form-group">
-                                            <label>Expiry Date</label>
-                                            <input type="text" placeholder="MM/YY" maxlength="5">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>CVV</label>
-                                            <input type="text" placeholder="123" maxlength="3">
-                                        </div>
-                                    </div>
-
-                                    <button class="submit-btn" onclick="processFunding()">Fund Wallet</button>
-                                </div>
+            <div class="payment-section" style="padding: 0; background: transparent;">
+                <h3 style="margin-bottom: 20px; font-size: 16px;">Select Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-method selected" onclick="selectPaymentMethod(this)">
+                        <div class="method-header">
+                            <div class="method-icon">💳</div>
+                            <div class="method-info">
+                                <h4>Debit/Credit Card</h4>
+                                <p>Paystack</p>
                             </div>
+                        </div>
+                        <div class="method-details">Instant funding • All cards accepted</div>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod(this)">
+                        <div class="method-header">
+                            <div class="method-icon">📱</div>
+                            <div class="method-info">
+                                <h4>Mobile Money</h4>
+                                <p>MTN, Vodafone, AirtelTigo</p>
+                            </div>
+                        </div>
+                        <div class="method-details">Instant funding • All networks</div>
+                    </div>
+
+
+                </div>
+
+                <div class="fund-form">
+                    <div class="form-group">
+                        <label>Amount (₵)</label>
+                        <input type="number" placeholder="Enter amount" min="10" id="fundAmount">
+                    </div>
+                    <div class="form-group" id="phoneNumberField" style="display: none;">
+                        <label>Phone Number</label>
+                        <input type="tel" id="fundPhoneNumber" placeholder="0XX XXX XXXX">
+                    </div>
+
+                    <div class="form-group" id="cardFields">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" id="cardExtraFields">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123" maxlength="3">
                         </div>
                     </div>
 
-                    
-                           <!-- Withdraw Modal -->
-                    <div class="modal" id="withdrawModal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2>Withdraw Funds</h2>
-                                <button class="close-modal" onclick="closeWithdrawModal()">×</button>
-                            </div>
+                    <button class="submit-btn" onclick="processFunding()">Fund Wallet</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                            <div class="fund-form" style="margin-top: 0;">
-                                <div class="form-group">
-                                    <label>Available Balance</label>
-                                    <input type="text" value="₵54,812.00" disabled>
-                                </div>
 
-                                <div class="form-group">
-                                    <label>Withdrawal Amount (₵)</label>
-                                    <input type="number" placeholder="Enter amount" min="50">
-                                </div>
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Withdraw Funds</h2>
+                <button class="close-modal" onclick="closeWithdrawModal()">×</button>
+            </div>
 
-                                <div class="form-group">
-                                    <label>Withdrawal Method</label>
-                                    <select>
-                                        <option>Bank Transfer</option>
-                                        <option>Mobile Money</option>
-                                    </select>
-                                </div>
+            <div class="fund-form" style="margin-top: 0;">
+                <div class="form-group">
+                    <label>Available Balance</label>
+                    <input type="text" value="₵54,812.00" disabled>
+                </div>
 
-                                <div class="form-group">
-                                    <label>Account Number</label>
-                                    <input type="text" placeholder="Enter account/mobile number">
-                                </div>
+                <div class="form-group">
+                    <label>Withdrawal Amount (₵)</label>
+                    <input type="number" placeholder="Enter amount" min="50">
+                </div>
 
-                                <div class="form-group">
-                                    <label>Account Name</label>
-                                    <input type="text" placeholder="Beneficiary name">
-                                </div>
+                <div class="form-group">
+                    <label>Withdrawal Method</label>
+                    <select>
+                        <option>Bank Transfer</option>
+                        <option>Mobile Money</option>
+                    </select>
+                </div>
 
-                                <div class="form-group">
-                                    <label>Bank/Network</label>
-                                    <select>
-                                        <option>Select Bank/Network</option>
-                                        <option>MTN Mobile Money</option>
-                                        <option>Vodafone Cash</option>
-                                        <option>AirtelTigo Money</option>
-                                        <option>Access Bank</option>
-                                        <option>Ecobank</option>
-                                        <option>GCB Bank</option>
-                                        <option>Stanbic Bank</option>
-                                    </select>
-                                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" placeholder="Enter account/mobile number">
+                </div>
 
-                                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">
-                                    ⚠️ Processing time: We will test it and put an average there!
-                                </p>
+                <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" placeholder="Beneficiary name">
+                </div>
 
-                                <button class="submit-btn" onclick="processWithdrawal()">Request Withdrawal</button>
-                            </div>
+                <div class="form-group">
+                    <label>Bank/Network</label>
+                    <select>
+                        <option>Select Bank/Network</option>
+                        <option>MTN Mobile Money</option>
+                        <option>Vodafone Cash</option>
+                        <option>AirtelTigo Money</option>
+                        <option>Access Bank</option>
+                        <option>Ecobank</option>
+                        <option>GCB Bank</option>
+                        <option>Stanbic Bank</option>
+                    </select>
+                </div>
+
+                <p style="font-size: 12px; color: #888; margin-bottom: 15px;">
+                    ⚠️ Processing time: We will test it and put an average there!
+                </p>
+
+                <button class="submit-btn" onclick="processWithdrawal()">Request Withdrawal</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Transfer Modal -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Transfer Money</h2>
+                <button class="close-btn" onclick="closeTransferModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Transfer Type Selection -->
+                <div class="transfer-type-section">
+                    <label>Transfer To:</label>
+                    <div class="transfer-types">
+                        <div class="transfer-type" onclick="selectTransferType('bank')">
+                            <span class="transfer-icon">🏦</span>
+                            <span>Bank Account</span>
                         </div>
-                    </div>  
-    
-                    
-                    <!-- Transfer Modal -->
-                    <div id="transferModal" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2>Transfer Money</h2>
-                                <button class="close-btn" onclick="closeTransferModal()">×</button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Transfer Type Selection -->
-                                <div class="transfer-type-section">
-                                    <label>Transfer To:</label>
-                                    <div class="transfer-types">
-                                        <div class="transfer-type" onclick="selectTransferType('bank')">
-                                            <span class="transfer-icon">🏦</span>
-                                            <span>Bank Account</span>
-                                        </div>
-                                        <div class="transfer-type" onclick="selectTransferType('momo')">
-                                            <span class="transfer-icon">📱</span>
-                                            <span>Mobile Money</span>
-                                        </div>
-                                        <div class="transfer-type" onclick="selectTransferType('p2p')">
-                                            <span class="transfer-icon">👤</span>
-                                            <span>Plutiply User</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Bank Transfer Fields -->
-                                <div id="bankFields" class="transfer-fields" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Bank Name</label>
-                                        <select id="bankName" class="form-input">
-                                            <option value="">Select Bank</option>
-                                            <option value="gcb">GCB Bank</option>
-                                            <option value="ecobank">Ecobank Ghana</option>
-                                            <option value="access">Access Bank</option>
-                                            <option value="fidelity">Fidelity Bank</option>
-                                            <option value="fnb">First National Bank</option>
-                                            <option value="stanbic">Stanbic Bank</option>
-                                            <option value="zenith">Zenith Bank</option>
-                                            <option value="calbank">CalBank</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Account Number</label>
-                                        <input type="text" id="bankAccountNumber" class="form-input" placeholder="Enter account number">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Account Name</label>
-                                        <input type="text" id="bankAccountName" class="form-input" placeholder="Beneficiary name" readonly>
-                                    </div>
-                                </div>
-
-                                <!-- Mobile Money Fields -->
-                                <div id="momoFields" class="transfer-fields" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Network</label>
-                                        <select id="momoNetwork" class="form-input">
-                                            <option value="">Select Network</option>
-                                            <option value="mtn">MTN Mobile Money</option>
-                                            <option value="vodafone">Vodafone Cash</option>
-                                            <option value="airteltigo">AirtelTigo Money</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Phone Number</label>
-                                        <input type="tel" id="momoPhone" class="form-input" placeholder="0XX XXX XXXX">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Account Name</label>
-                                        <input type="text" id="momoAccountName" class="form-input" placeholder="Beneficiary name" readonly>
-                                    </div>
-                                </div>
-
-                                <!-- P2P Transfer Fields -->
-                                <div id="p2pFields" class="transfer-fields" style="display: none;">
-                                    <div class="form-group">
-                                        <label>Plutiply Username</label>
-                                        <input type="text" id="p2pUsername" class="form-input" placeholder="Plutiply Username">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Recipient Name</label>
-                                        <input type="text" id="p2pRecipientName" class="form-input" placeholder="Recipient name" readonly>
-                                    </div>
-                                </div>
-
-                                <!-- Common Amount Field -->
-                                <div id="amountField" class="form-group" style="display: none;">
-                                    <label>Amount</label>
-                                    <input type="number" id="transferAmount" class="form-input" placeholder="Enter amount (₵)">
-                                </div>
-
-                                <!-- Description Field -->
-                                <div id="descriptionField" class="form-group" style="display: none;">
-                                    <label>Description (Optional)</label>
-                                    <input type="text" id="transferDescription" class="form-input" placeholder="Payment for...">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="cancel-btn" onclick="closeTransferModal()">Cancel</button>
-                                <button class="submit-btn" onclick="processTransfer()">Send Money</button>
-                            </div>
+                        <div class="transfer-type" onclick="selectTransferType('momo')">
+                            <span class="transfer-icon">📱</span>
+                            <span>Mobile Money</span>
+                        </div>
+                        <div class="transfer-type" onclick="selectTransferType('p2p')">
+                            <span class="transfer-icon">👤</span>
+                            <span>Plutiply User</span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Alert Container -->
-                    <div id="alertContainer"></div>
+                <!-- Bank Transfer Fields -->
+                <div id="bankFields" class="transfer-fields" style="display: none;">
+                    <div class="form-group">
+                        <label>Bank Name</label>
+                        <select id="bankName" class="form-input">
+                            <option value="">Select Bank</option>
+                            <option value="gcb">GCB Bank</option>
+                            <option value="ecobank">Ecobank Ghana</option>
+                            <option value="access">Access Bank</option>
+                            <option value="fidelity">Fidelity Bank</option>
+                            <option value="fnb">First National Bank</option>
+                            <option value="stanbic">Stanbic Bank</option>
+                            <option value="zenith">Zenith Bank</option>
+                            <option value="calbank">CalBank</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Number</label>
+                        <input type="text" id="bankAccountNumber" class="form-input" placeholder="Enter account number">
+                    </div>
+                    <div class="form-group">
+                        <label>Account Name</label>
+                        <input type="text" id="bankAccountName" class="form-input" placeholder="Beneficiary name"
+                            readonly>
+                    </div>
+                </div>
+
+                <!-- Mobile Money Fields -->
+                <div id="momoFields" class="transfer-fields" style="display: none;">
+                    <div class="form-group">
+                        <label>Network</label>
+                        <select id="momoNetwork" class="form-input">
+                            <option value="">Select Network</option>
+                            <option value="mtn">MTN Mobile Money</option>
+                            <option value="vodafone">Vodafone Cash</option>
+                            <option value="airteltigo">AirtelTigo Money</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="momoPhone" class="form-input" placeholder="0XX XXX XXXX">
+                    </div>
+                    <div class="form-group">
+                        <label>Account Name</label>
+                        <input type="text" id="momoAccountName" class="form-input" placeholder="Beneficiary name"
+                            readonly>
+                    </div>
+                </div>
+
+                <!-- P2P Transfer Fields -->
+                <div id="p2pFields" class="transfer-fields" style="display: none;">
+                    <div class="form-group">
+                        <label>Plutiply Username</label>
+                        <input type="text" id="p2pUsername" class="form-input" placeholder="Plutiply Username">
+                    </div>
+                    <div class="form-group">
+                        <label>Recipient Name</label>
+                        <input type="text" id="p2pRecipientName" class="form-input" placeholder="Recipient name"
+                            readonly>
+                    </div>
+                </div>
+
+                <!-- Common Amount Field -->
+                <div id="amountField" class="form-group" style="display: none;">
+                    <label>Amount</label>
+                    <input type="number" id="transferAmount" class="form-input" placeholder="Enter amount (₵)">
+                </div>
+
+                <!-- Description Field -->
+                <div id="descriptionField" class="form-group" style="display: none;">
+                    <label>Description (Optional)</label>
+                    <input type="text" id="transferDescription" class="form-input" placeholder="Payment for...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeTransferModal()">Cancel</button>
+                <button class="submit-btn" onclick="processTransfer()">Send Money</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
 
     <!-- Cedi Loader -->
     <div id="cediLoader" class="cedi-loader-overlay">
@@ -527,7 +533,8 @@
                     <input type="number" id="airtimeAmount" class="form-input" placeholder="Enter amount">
                 </div>
                 <p style="font-size: 12px; color: #888; margin-top: 10px;">
-                    Need more options? <a href="AIRTIME/airtime.html" style="color: #6366f1;">Visit full airtime page</a>
+                    Need more options? <a href="AIRTIME/airtime.html" style="color: #6366f1;">Visit full airtime
+                        page</a>
                 </p>
             </div>
             <div class="modal-footer">
@@ -621,11 +628,12 @@
         </div>
     </div>
 
-   <script src="walletjs.js"></script>
-       
+    <script src="walletjs.js"></script>
+
 </body>
-</html> 
-       
+
+</html>
+
 
 
 
@@ -664,7 +672,7 @@
 
 
 
-                                    <!-- <div class="payment-method" onclick="selectPaymentMethod(this)">
+<!-- <div class="payment-method" onclick="selectPaymentMethod(this)">
                                         <div class="method-header">
                                             <div class="method-icon">🏦</div>
                                             <div class="method-info">

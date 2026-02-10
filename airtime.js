@@ -1,3 +1,46 @@
+// ========================================
+// FETCH AND DISPLAY USER DATA
+// ========================================
+async function fetchUserProfile() {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const response = await fetch('http://localhost:5000/api/auth/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch profile');
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Update sidebar username
+            document.getElementById('sidebarUsername').textContent = data.data.fullName;
+
+            // Update user avatar initials
+            const initials = data.data.fullName
+                .split(' ')
+                .map(word => word[0])
+                .join('')
+                .substring(0, 2)
+                .toUpperCase();
+            document.getElementById('sidebarAvatar').textContent = initials;
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error);
+    }
+}
+
+// Call fetchUserProfile when page loads
+fetchUserProfile();
 //Loader functions
 const MIN_LOADER_TIME = 2000; // 2 cycles × 1s
 const startTime = Date.now();
@@ -20,8 +63,8 @@ function hideLoader() {
         dashboard.style.display = "flex";
         dashboard.style.opacity = "1";
     }, 600); // matches fade-out transition
-} 
-     
+}
+
 // Constants
 const WALLET_BALANCE = 0.00;
 const MIN_AMOUNT = 1;
@@ -55,9 +98,9 @@ function createNotificationPanel() {
     const panel = document.createElement('div');
     panel.id = 'notificationPanel';
     panel.className = 'notification-panel';
-    
+
     const unreadCount = notifications.filter(n => !n.read).length;
-    
+
     let notificationHTML = `
         <div class="notification-header">
             <h3>Notifications</h3>
@@ -69,7 +112,7 @@ function createNotificationPanel() {
         </div>
         <div class="notification-list">
     `;
-    
+
     if (notifications.length === 0) {
         notificationHTML += `
             <div class="notification-empty">
@@ -92,21 +135,21 @@ function createNotificationPanel() {
             `;
         });
     }
-    
+
     notificationHTML += `
         </div>
         <div class="notification-footer">
             <a href="#" class="view-all-link" onclick="closeNotificationPanel(event)">Close</a>
         </div>
     `;
-    
+
     panel.innerHTML = notificationHTML;
     return panel;
 }
 
 function toggleNotificationPanel() {
     let panel = document.getElementById('notificationPanel');
-    
+
     if (panel) {
         // Close panel
         panel.classList.remove('active');
@@ -115,7 +158,7 @@ function toggleNotificationPanel() {
         // Open panel
         panel = createNotificationPanel();
         document.body.appendChild(panel);
-        
+
         // Position panel near notification button
         const notifBtn = document.querySelector('.notification-btn');
         if (notifBtn) {
@@ -123,23 +166,23 @@ function toggleNotificationPanel() {
             panel.style.top = rect.bottom + 10 + 'px';
             panel.style.right = window.innerWidth - rect.right + 'px';
         }
-        
+
         // Trigger animation
         setTimeout(() => panel.classList.add('active'), 10);
-        
+
         // Close when clicking outside
         setTimeout(() => {
             document.addEventListener('click', closeOnClickOutside);
         }, 100);
     }
-    
+
     updateNotificationBadge();
 }
 
 function closeOnClickOutside(e) {
     const panel = document.getElementById('notificationPanel');
     const notifBtn = document.querySelector('.notification-btn');
-    
+
     if (panel && !panel.contains(e.target) && !notifBtn.contains(e.target)) {
         panel.classList.remove('active');
         setTimeout(() => panel.remove(), 300);
@@ -192,7 +235,7 @@ function removeNotification(id) {
 function updateNotificationBadge() {
     const notifBtn = document.querySelector('.notification-btn');
     const unreadCount = notifications.filter(n => !n.read).length;
-    
+
     // Add or remove has-notifications class
     if (unreadCount > 0 && notifBtn) {
         notifBtn.classList.add('has-notifications');
@@ -226,13 +269,13 @@ function addNotification(type, title, message) {
 // Show Alert Function
 function showAlert(message, type = 'info', duration = 5000) {
     const alertContainer = document.getElementById('alertContainer');
-    
+
     const alert = document.createElement('div');
     alert.className = `alert ${type}`;
     alert.textContent = message;
-    
+
     alertContainer.appendChild(alert);
-    
+
     // Auto remove after duration
     setTimeout(() => {
         alert.style.opacity = '0';
@@ -245,7 +288,7 @@ function showAlert(message, type = 'info', duration = 5000) {
 function toggleBalance() {
     const balanceDisplay = document.getElementById('walletBalance');
     balanceVisible = !balanceVisible;
-    
+
     if (balanceVisible) {
         balanceDisplay.textContent = `₵${actualBalance.toFixed(2)}`;
     } else {
@@ -261,7 +304,7 @@ function initializeApp() {
     updateNotificationBadge();
     // Add first recipient when in bulk mode
     addRecipient();
-    
+
     // Add notification button click handler
     const notificationBtn = document.querySelector('.notification-btn');
     if (notificationBtn) {
@@ -278,12 +321,12 @@ function setupEventListeners() {
     document.querySelectorAll('.network-card').forEach(card => {
         card.setAttribute('tabindex', '0');
         card.setAttribute('role', 'button');
-        
-        card.addEventListener('click', function() {
+
+        card.addEventListener('click', function () {
             selectNetwork(this.dataset.network, this);
         });
-        
-        card.addEventListener('keypress', function(e) {
+
+        card.addEventListener('keypress', function (e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 selectNetwork(this.dataset.network, this);
@@ -293,14 +336,14 @@ function setupEventListeners() {
 
     // Quick amount buttons - Single mode
     document.querySelectorAll('#quickAmounts .amount-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             setAmount(this.dataset.amount, 'single');
         });
     });
 
     // Quick amount buttons - Bulk mode
     document.querySelectorAll('.bulk-amount-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             setAmount(this.dataset.amount, 'bulk');
         });
     });
@@ -387,7 +430,7 @@ function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
     const hamburger = document.getElementById('hamburger');
-    
+
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
     hamburger.classList.toggle('active');
@@ -406,34 +449,34 @@ if (window.innerWidth <= 768) {
 // Switch between single and bulk mode
 function switchMode(mode) {
     purchaseMode = mode;
-    
+
     // Update button states
     document.getElementById('singleModeBtn').classList.toggle('active', mode === 'single');
     document.getElementById('bulkModeBtn').classList.toggle('active', mode === 'bulk');
-    
+
     // Show/hide appropriate fields
     document.getElementById('singleModeFields').style.display = mode === 'single' ? 'block' : 'none';
     document.getElementById('bulkModeFields').classList.toggle('active', mode === 'bulk');
-    
+
     // Update summary visibility
     document.getElementById('summaryPhoneRow').style.display = mode === 'single' ? 'flex' : 'none';
     document.getElementById('summaryRecipientsRow').style.display = mode === 'bulk' ? 'flex' : 'none';
-    
+
     updateSummary();
 }
 
 // Select network
 function selectNetwork(network, element) {
     selectedNetwork = network;
-    
+
     // Remove selected class from all cards
     document.querySelectorAll('.network-card').forEach(card => {
         card.classList.remove('selected');
     });
-    
+
     // Add selected class to clicked card
     element.classList.add('selected');
-    
+
     // Update summary
     document.getElementById('summaryNetwork').textContent = network;
     updateSummary();
@@ -443,20 +486,20 @@ function selectNetwork(network, element) {
 function setAmount(amount, mode) {
     if (mode === 'single') {
         document.getElementById('amount').value = amount;
-        
+
         // Update button states
         document.querySelectorAll('#quickAmounts .amount-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.amount === amount);
         });
     } else {
         document.getElementById('bulkAmount').value = amount;
-        
+
         // Update button states
         document.querySelectorAll('.bulk-amount-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.amount === amount);
         });
     }
-    
+
     updateSummary();
 }
 
@@ -477,19 +520,19 @@ function clearQuickAmountSelection(mode) {
 function handlePhoneInput() {
     const phoneInput = document.getElementById('phoneNumber');
     const phoneError = document.getElementById('phoneError');
-    
+
     // Remove non-digits
     phoneInput.value = phoneInput.value.replace(/\D/g, '');
-    
+
     // Limit to 10 digits
     if (phoneInput.value.length > 10) {
         phoneInput.value = phoneInput.value.slice(0, 10);
     }
-    
+
     // Clear error on input
     phoneError.classList.remove('show');
     phoneInput.classList.remove('error');
-    
+
     updateSummary();
 }
 
@@ -502,11 +545,11 @@ function validatePhone(phone) {
 function addRecipient() {
     recipientCount++;
     const recipientsList = document.getElementById('recipientsList');
-    
+
     const recipientItem = document.createElement('div');
     recipientItem.className = 'recipient-item';
     recipientItem.dataset.recipientId = recipientCount;
-    
+
     recipientItem.innerHTML = `
         <div class="recipient-header">
             <span class="recipient-number">Recipient ${recipientCount}</span>
@@ -529,53 +572,53 @@ function addRecipient() {
             </div>
         </div>
     `;
-    
+
     recipientsList.appendChild(recipientItem);
-    
+
     // Add event listeners to the new recipient
     const phoneInput = recipientItem.querySelector('.recipient-phone-input');
-    phoneInput.addEventListener('input', function() {
+    phoneInput.addEventListener('input', function () {
         // Remove non-digits
         this.value = this.value.replace(/\D/g, '');
-        
+
         // Limit to 10 digits
         if (this.value.length > 10) {
             this.value = this.value.slice(0, 10);
         }
-        
+
         // Clear error on input
         const error = recipientItem.querySelector('.recipient-error');
         error.classList.remove('show');
         this.classList.remove('error');
-        
+
         updateSummary();
     });
-    
+
     // Network selection
     recipientItem.querySelectorAll('.recipient-network-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             // Remove selected class from siblings
             recipientItem.querySelectorAll('.recipient-network-btn').forEach(b => {
                 b.classList.remove('selected');
             });
-            
+
             // Add selected class to this button
             this.classList.add('selected');
-            
+
             updateSummary();
         });
     });
-    
+
     // Remove recipient
     const removeBtn = recipientItem.querySelector('.remove-recipient-btn');
     if (removeBtn) {
-        removeBtn.addEventListener('click', function() {
+        removeBtn.addEventListener('click', function () {
             recipientItem.remove();
             updateRecipientNumbers();
             updateSummary();
         });
     }
-    
+
     updateSummary();
 }
 
@@ -600,7 +643,7 @@ function updateSummary() {
 function updateSingleSummary() {
     const phone = document.getElementById('phoneNumber').value;
     const amount = parseFloat(document.getElementById('amount').value) || 0;
-    
+
     document.getElementById('summaryPhone').textContent = phone || '-';
     document.getElementById('summaryAmount').textContent = `₵${amount.toFixed(2)}`;
     document.getElementById('summaryTotal').textContent = `₵${amount.toFixed(2)}`;
@@ -610,34 +653,34 @@ function updateSingleSummary() {
 function updateBulkSummary() {
     const amount = parseFloat(document.getElementById('bulkAmount').value) || 0;
     const recipientItems = document.querySelectorAll('.recipient-item');
-    
+
     // Count valid recipients
     let validCount = 0;
     const networkCounts = {};
-    
+
     recipientItems.forEach(item => {
         const phone = item.querySelector('.recipient-phone-input').value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-        
+
         if (phone !== '' && selectedNetworkBtn && validatePhone(phone)) {
             validCount++;
             const network = selectedNetworkBtn.dataset.network;
             networkCounts[network] = (networkCounts[network] || 0) + 1;
         }
     });
-    
+
     const totalCost = amount * validCount;
-    
+
     document.getElementById('summaryRecipients').textContent = validCount;
     document.getElementById('summaryAmount').textContent = `₵${amount.toFixed(2)} × ${validCount}`;
     document.getElementById('summaryTotal').textContent = `₵${totalCost.toFixed(2)}`;
-    
+
     // Show network breakdown if there are multiple networks
     const breakdownDiv = document.getElementById('summaryNetworkBreakdown');
     if (Object.keys(networkCounts).length > 1) {
         breakdownDiv.style.display = 'block';
         breakdownDiv.innerHTML = '<div style="margin: 10px 0; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">';
-        
+
         Object.entries(networkCounts).forEach(([network, count]) => {
             breakdownDiv.innerHTML += `
                 <div class="summary-item" style="font-size: 13px; margin: 5px 0;">
@@ -646,7 +689,7 @@ function updateBulkSummary() {
                 </div>
             `;
         });
-        
+
         breakdownDiv.innerHTML += '</div>';
     } else {
         breakdownDiv.style.display = 'none';
@@ -656,18 +699,18 @@ function updateBulkSummary() {
 // Validate single purchase
 function validateSinglePurchase() {
     let isValid = true;
-    
+
     // Validate network
     if (!selectedNetwork) {
         showAlert('Please select a network', 'error');
         return false;
     }
-    
+
     // Validate phone number
     const phone = document.getElementById('phoneNumber').value.trim();
     const phoneError = document.getElementById('phoneError');
     const phoneInput = document.getElementById('phoneNumber');
-    
+
     if (!phone) {
         phoneError.textContent = 'Phone number is required';
         phoneError.classList.add('show');
@@ -682,12 +725,12 @@ function validateSinglePurchase() {
         phoneError.classList.remove('show');
         phoneInput.classList.remove('error');
     }
-    
+
     // Validate amount
     const amount = parseFloat(document.getElementById('amount').value);
     const amountError = document.getElementById('amountError');
     const amountInput = document.getElementById('amount');
-    
+
     if (!amount || amount < MIN_AMOUNT) {
         amountError.textContent = `Amount must be at least ₵${MIN_AMOUNT}`;
         amountError.classList.add('show');
@@ -702,19 +745,19 @@ function validateSinglePurchase() {
         amountError.classList.remove('show');
         amountInput.classList.remove('error');
     }
-    
+
     return isValid;
 }
 
 // Validate bulk purchase
 function validateBulkPurchase() {
     let isValid = true;
-    
+
     // Validate amount
     const amount = parseFloat(document.getElementById('bulkAmount').value);
     const amountError = document.getElementById('bulkAmountError');
     const amountInput = document.getElementById('bulkAmount');
-    
+
     if (!amount || amount < MIN_AMOUNT) {
         amountError.textContent = `Amount must be at least ₵${MIN_AMOUNT}`;
         amountError.classList.add('show');
@@ -724,7 +767,7 @@ function validateBulkPurchase() {
         amountError.classList.remove('show');
         amountInput.classList.remove('error');
     }
-    
+
     // Validate recipients
     const recipientItems = document.querySelectorAll('.recipient-item');
     const validRecipients = [];
@@ -732,18 +775,18 @@ function validateBulkPurchase() {
     const invalidRecipients = [];
     const missingNetworkRecipients = [];
     const phoneNumbers = new Set();
-    
+
     recipientItems.forEach((item, index) => {
         const phoneInput = item.querySelector('.recipient-phone-input');
         const phoneError = item.querySelector('.recipient-error');
         const phone = phoneInput.value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-        
+
         // Skip empty recipients
         if (phone === '' && !selectedNetworkBtn) {
             return;
         }
-        
+
         // Check for duplicates
         if (phoneNumbers.has(phone)) {
             duplicates.push(phone);
@@ -754,7 +797,7 @@ function validateBulkPurchase() {
             return;
         }
         phoneNumbers.add(phone);
-        
+
         // Validate phone format
         if (!validatePhone(phone)) {
             invalidRecipients.push(index + 1);
@@ -764,40 +807,40 @@ function validateBulkPurchase() {
             isValid = false;
             return;
         }
-        
+
         // Check if network is selected
         if (!selectedNetworkBtn) {
             missingNetworkRecipients.push(index + 1);
             isValid = false;
             return;
         }
-        
+
         validRecipients.push({
             phone: phone,
             network: selectedNetworkBtn.dataset.network
         });
     });
-    
+
     if (validRecipients.length === 0) {
         showAlert('Please add at least one recipient with phone number and network', 'error');
         return false;
     }
-    
+
     if (duplicates.length > 0) {
         showAlert(`Duplicate phone number(s) detected: ${[...new Set(duplicates)].join(', ')}`, 'error');
         return false;
     }
-    
+
     if (invalidRecipients.length > 0) {
         showAlert(`Invalid phone number(s) for recipient ${invalidRecipients.join(', ')}`, 'error');
         return false;
     }
-    
+
     if (missingNetworkRecipients.length > 0) {
         showAlert(`Please select a network for recipient ${missingNetworkRecipients.join(', ')}`, 'error');
         return false;
     }
-    
+
     // Check total cost against balance
     const totalCost = amount * validRecipients.length;
     if (totalCost > WALLET_BALANCE) {
@@ -807,7 +850,7 @@ function validateBulkPurchase() {
         showAlert(`Total cost (₵${totalCost.toFixed(2)}) exceeds wallet balance`, 'error');
         isValid = false;
     }
-    
+
     return isValid;
 }
 
@@ -817,40 +860,40 @@ function purchaseAirtime() {
     if (isProcessing) {
         return;
     }
-    
+
     let isValid = false;
-    
+
     if (purchaseMode === 'single') {
         isValid = validateSinglePurchase();
     } else {
         isValid = validateBulkPurchase();
     }
-    
+
     if (!isValid) {
         return;
     }
-    
+
     // Set processing state
     isProcessing = true;
-    
+
     // Disable button
     const purchaseBtn = document.getElementById('purchaseBtn');
     purchaseBtn.disabled = true;
     purchaseBtn.textContent = 'Processing...';
-    
+
     // Show loading
     document.getElementById('loadingOverlay').classList.add('active');
-    
+
     // Simulate API call
     setTimeout(() => {
         // Re-enable button
         purchaseBtn.disabled = false;
         purchaseBtn.textContent = 'Purchase Airtime';
         isProcessing = false;
-        
+
         // Hide loading
         document.getElementById('loadingOverlay').classList.remove('active');
-        
+
         if (purchaseMode === 'single') {
             showSingleSuccess();
         } else {
@@ -864,26 +907,26 @@ function showSingleSuccess() {
     const phone = document.getElementById('phoneNumber').value;
     const amount = parseFloat(document.getElementById('amount').value);
     const txId = generateTransactionId();
-    
+
     document.getElementById('successTitle').textContent = 'Purchase Successful!';
     document.getElementById('successMessage').textContent = 'Your airtime has been successfully delivered';
-    
+
     document.getElementById('singleSuccessDetails').style.display = 'block';
     document.getElementById('bulkSuccessDetails').style.display = 'none';
-    
+
     document.getElementById('successNetwork').textContent = selectedNetwork;
     document.getElementById('successPhone').textContent = phone;
     document.getElementById('successAmount').textContent = `₵${amount.toFixed(2)}`;
     document.getElementById('successTxId').textContent = txId;
-    
+
     document.getElementById('successModal').classList.add('active');
 
     // Add notification
     addNotification('success', 'Purchase Successful', `Airtime of ₵${amount.toFixed(2)} sent to ${phone}`);
-    
+
     // Show success alert
     showAlert(`✓ Airtime sent successfully to ${phone}`, 'success', 3000);
-    
+
     resetForm();
 }
 
@@ -891,12 +934,12 @@ function showSingleSuccess() {
 function showBulkSuccess() {
     const amount = parseFloat(document.getElementById('bulkAmount').value);
     const recipientItems = document.querySelectorAll('.recipient-item');
-    
+
     const validRecipients = [];
     recipientItems.forEach(item => {
         const phone = item.querySelector('.recipient-phone-input').value.trim();
         const selectedNetworkBtn = item.querySelector('.recipient-network-btn.selected');
-        
+
         if (phone !== '' && selectedNetworkBtn && validatePhone(phone)) {
             validRecipients.push({
                 phone: phone,
@@ -904,16 +947,16 @@ function showBulkSuccess() {
             });
         }
     });
-    
+
     document.getElementById('successTitle').textContent = 'Bulk Purchase Successful!';
     document.getElementById('successMessage').textContent = `Airtime successfully sent to ${validRecipients.length} recipient(s)`;
-    
+
     document.getElementById('singleSuccessDetails').style.display = 'none';
     document.getElementById('bulkSuccessDetails').style.display = 'block';
-    
+
     const bulkList = document.getElementById('bulkSuccessDetails');
     bulkList.innerHTML = '';
-    
+
     validRecipients.forEach((recipient, index) => {
         const txId = generateTransactionId();
         const item = document.createElement('div');
@@ -930,15 +973,15 @@ function showBulkSuccess() {
         `;
         bulkList.appendChild(item);
     });
-    
+
     document.getElementById('successModal').classList.add('active');
 
     // Add notification
     addNotification('success', 'Bulk Purchase Successful', `Airtime sent to ${validRecipients.length} recipients`);
-    
+
     // Show success alert
     showAlert(`✓ Airtime sent to ${validRecipients.length} recipients`, 'success', 3000);
-    
+
     resetForm();
 }
 
@@ -960,26 +1003,26 @@ function resetForm() {
     document.getElementById('phoneNumber').value = '';
     document.getElementById('amount').value = '';
     document.getElementById('bulkAmount').value = '';
-    
+
     // Clear errors
     document.querySelectorAll('.error-message').forEach(error => error.classList.remove('show'));
     document.querySelectorAll('.error').forEach(input => input.classList.remove('error'));
-    
+
     // Clear network selection
     document.querySelectorAll('.network-card').forEach(card => card.classList.remove('selected'));
     selectedNetwork = null;
-    
+
     // Clear quick amount selection
     document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
-    
+
     // Reset bulk recipients
     const recipientsList = document.getElementById('recipientsList');
     recipientsList.innerHTML = '';
     recipientCount = 0;
-    
+
     // Add fresh first recipient
     addRecipient();
-    
+
     // Reset summary display
     document.getElementById('summaryNetwork').textContent = 'Not selected';
     document.getElementById('summaryPhone').textContent = '-';
@@ -987,6 +1030,6 @@ function resetForm() {
     document.getElementById('summaryAmount').textContent = '₵0.00';
     document.getElementById('summaryTotal').textContent = '₵0.00';
     document.getElementById('summaryNetworkBreakdown').style.display = 'none';
-    
+
     updateSummary();
 }

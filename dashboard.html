@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plutiply - Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
 </head>
+
 <body>
     <div class="loader-overlay" id="loader">
-    <div class="loader-circle-50"></div>
+        <div class="loader-circle-50"></div>
     </div>
 
     <div class="dashboard" style="display: none;">
-            <!-- Sidebar Overlay -->
+        <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
         <!-- Sidebar -->
@@ -28,11 +30,11 @@
                         <span>🏠</span>
                         <span>Dashboard</span>
                     </a>
-                    <a href="WALLET/mywallet.html" class="menu-item">
+                    <a href="mywallet.html" class="menu-item">
                         <span>💰</span>
                         <span>My Wallet</span>
                     </a>
-                    <a href="AIRTIME/airtime.html" class="menu-item">
+                    <a href="airtime.html" class="menu-item">
                         <span>📱</span>
                         <span>Buy Airtime</span>
                     </a>
@@ -89,7 +91,7 @@
 
             <div class="menu-section">
                 <h3>Log-Out</h3>
-                <a href="MAINPAGE/index.html" class="menu-item">
+                <a href="index.html" class="menu-item">
                     <span>🚪</span>
                     <span>Log-Out</span>
                 </a>
@@ -99,24 +101,24 @@
 
         <!-- Main Content -->
         <main class="main-content">
-                    <header class="header">
-                        <div class="header-actions">
-                            <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                            <div class="search-box">
-                                <span>🔍</span>
-                                <input type="text" placeholder="Search...">
-                            </div>
-                            <button class="icon-btn">🔔</button>
-                        </div>
-                        <div class="greeting">
-                            <h1 id="headerGreeting">Hi, User!</h1>
-                            <p>Dashboard</p>
-                        </div>
-                    </header>
+            <header class="header">
+                <div class="header-actions">
+                    <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <button class="icon-btn">🔔</button>
+                </div>
+                <div class="greeting">
+                    <h1 id="headerGreeting">Hi, User!</h1>
+                    <p>Dashboard</p>
+                </div>
+            </header>
 
             <!-- Stats Cards -->
             <div class="stats-grid">
@@ -125,7 +127,7 @@
                         <div class="stat-label">
                             💰 Wallet Balance
                         </div>
-                        
+
                     </div>
                     <div class="stat-value">₵0.00</div>
                     <div class="mini-chart">
@@ -145,7 +147,7 @@
                         <div class="stat-label">
                             📊 Total Spending
                         </div>
-                        
+
                     </div>
                     <div class="stat-value">₵0.00</div>
                     <div class="mini-chart">
@@ -281,7 +283,7 @@
                     <h3>Transaction History</h3>
                     <button class="icon-btn">⋯</button>
                 </div>
-                
+
             </div>
 
             <!-- Spending Overview -->
@@ -290,11 +292,12 @@
                 <div class="spending-stats">
                     <div class="spending-stat">
                         <h4>Total Spent</h4>
-                        <p>₵0.00</p>  
+                        <p>₵0.00</p>
                     </div>
                     <div style="text-align: center;">
                         <button class="chart-filter">Day</button>
-                        <button class="chart-filter" style="background: rgba(76, 175, 80, 0.2); border-color: #4CAF50;">Week</button>
+                        <button class="chart-filter"
+                            style="background: rgba(76, 175, 80, 0.2); border-color: #4CAF50;">Week</button>
                         <button class="chart-filter">Month</button>
                     </div>
                     <div class="spending-stat" style="text-align: right;">
