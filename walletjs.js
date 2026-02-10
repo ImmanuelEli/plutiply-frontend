@@ -1,55 +1,12 @@
-// ========================================
-// FETCH AND DISPLAY USER DATA
-// ========================================
-async function fetchUserProfile() {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'index.html';
-            return;
-        }
-
-        const response = await fetch('http://localhost:5000/api/auth/profile', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch profile');
-        }
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Update sidebar username
-            document.getElementById('sidebarUsername').textContent = data.data.fullName;
-
-            // Update user avatar initials
-            const initials = data.data.fullName
-                .split(' ')
-                .map(word => word[0])
-                .join('')
-                .substring(0, 2)
-                .toUpperCase();
-            document.getElementById('sidebarAvatar').textContent = initials;
-        }
-    } catch (error) {
-        console.error('Error fetching profile:', error);
-    }
-}
-
-// Call fetchUserProfile when page loads
-fetchUserProfile();
-let balanceVisible = true;
-const actualBalance = '₵0.00';
+ let balanceVisible = true;
+ const actualBalance = '₵0.00';
 
 // Toggle sidebar
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
     const hamburger = document.getElementById('hamburger');
-
+    
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
     hamburger.classList.toggle('active');
@@ -69,7 +26,7 @@ if (window.innerWidth <= 768) {
 function toggleBalance() {
     const balanceDisplay = document.getElementById('balanceDisplay');
     balanceVisible = !balanceVisible;
-
+    
     if (balanceVisible) {
         balanceDisplay.textContent = actualBalance;
     } else {
@@ -126,7 +83,7 @@ function selectPaymentMethod(element) {
 // Process funding
 function processFunding() {
     const amount = document.getElementById('fundAmount').value;
-
+    
     if (!amount || amount < 5) {
         showAlert('Please enter an amount of at least ₵5');
         return;
@@ -144,10 +101,10 @@ function processWithdrawal() {
 
 // Filter transactions
 document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function() {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
-
+        
         const filter = this.textContent;
         // Filter logic will be implemented with backend
         console.log('Filtering by:', filter);
@@ -164,7 +121,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // Close modals on outside click
 document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', function (e) {
+    modal.addEventListener('click', function(e) {
         if (e.target === this) {
             this.classList.remove('active');
         }
@@ -173,15 +130,15 @@ document.querySelectorAll('.modal').forEach(modal => {
 
 // Menu item navigation
 document.querySelectorAll('.menu-item').forEach(item => {
-    item.addEventListener('click', function (e) {
-
+    item.addEventListener('click', function(e) {
+        
         document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
         this.classList.add('active');
     });
 });
 
 
-//Loader functions
+    //Loader functions
 const MIN_LOADER_TIME = 2000; // 2 cycles × 1s
 const startTime = Date.now();
 
@@ -202,10 +159,10 @@ function hideLoader() {
         loader.style.display = "none";
         dashboard.style.display = "flex";
         dashboard.style.opacity = "1";
-
+        
         // Update notification badge
         updateNotificationBadge();
-
+        
         // Add notification button click handler
         const notificationBtn = document.querySelector('.notification-btn');
         if (notificationBtn) {
@@ -259,9 +216,9 @@ function createNotificationPanel() {
     const panel = document.createElement('div');
     panel.id = 'notificationPanel';
     panel.className = 'notification-panel';
-
+    
     const unreadCount = notifications.filter(n => !n.read).length;
-
+    
     let notificationHTML = `
         <div class="notification-header">
             <h3>Notifications</h3>
@@ -273,7 +230,7 @@ function createNotificationPanel() {
         </div>
         <div class="notification-list">
     `;
-
+    
     if (notifications.length === 0) {
         notificationHTML += `
             <div class="notification-empty">
@@ -296,21 +253,21 @@ function createNotificationPanel() {
             `;
         });
     }
-
+    
     notificationHTML += `
         </div>
         <div class="notification-footer">
             <a href="#" class="view-all-link" onclick="closeNotificationPanel(event)">Close</a>
         </div>
     `;
-
+    
     panel.innerHTML = notificationHTML;
     return panel;
 }
 
 function toggleNotificationPanel() {
     let panel = document.getElementById('notificationPanel');
-
+    
     if (panel) {
         // Close panel
         panel.classList.remove('active');
@@ -319,7 +276,7 @@ function toggleNotificationPanel() {
         // Open panel
         panel = createNotificationPanel();
         document.body.appendChild(panel);
-
+        
         // Position panel near notification button
         const notifBtn = document.querySelector('.notification-btn');
         if (notifBtn) {
@@ -327,23 +284,23 @@ function toggleNotificationPanel() {
             panel.style.top = rect.bottom + 10 + 'px';
             panel.style.right = window.innerWidth - rect.right + 'px';
         }
-
+        
         // Trigger animation
         setTimeout(() => panel.classList.add('active'), 10);
-
+        
         // Close when clicking outside
         setTimeout(() => {
             document.addEventListener('click', closeOnClickOutside);
         }, 100);
     }
-
+    
     updateNotificationBadge();
 }
 
 function closeOnClickOutside(e) {
     const panel = document.getElementById('notificationPanel');
     const notifBtn = document.querySelector('.notification-btn');
-
+    
     if (panel && !panel.contains(e.target) && !notifBtn.contains(e.target)) {
         panel.classList.remove('active');
         setTimeout(() => panel.remove(), 300);
@@ -396,7 +353,7 @@ function removeNotification(id) {
 function updateNotificationBadge() {
     const notifBtn = document.querySelector('.notification-btn');
     const unreadCount = notifications.filter(n => !n.read).length;
-
+    
     // Add or remove has-notifications class
     if (unreadCount > 0 && notifBtn) {
         notifBtn.classList.add('has-notifications');
@@ -423,18 +380,18 @@ function closeTransferModal() {
 
 function selectTransferType(type) {
     selectedTransferType = type;
-
+    
     // Update UI
     document.querySelectorAll('.transfer-type').forEach(el => {
         el.classList.remove('selected');
     });
     event.target.closest('.transfer-type').classList.add('selected');
-
+    
     // Hide all fields first
     document.getElementById('bankFields').style.display = 'none';
     document.getElementById('momoFields').style.display = 'none';
     document.getElementById('p2pFields').style.display = 'none';
-
+    
     // Show relevant fields
     if (type === 'bank') {
         document.getElementById('bankFields').style.display = 'block';
@@ -443,7 +400,7 @@ function selectTransferType(type) {
     } else if (type === 'p2p') {
         document.getElementById('p2pFields').style.display = 'block';
     }
-
+    
     // Show common fields
     document.getElementById('amountField').style.display = 'block';
     document.getElementById('descriptionField').style.display = 'block';
@@ -459,7 +416,7 @@ function resetTransferForm() {
     document.getElementById('p2pFields').style.display = 'none';
     document.getElementById('amountField').style.display = 'none';
     document.getElementById('descriptionField').style.display = 'none';
-
+    
     // Clear all inputs
     document.querySelectorAll('.transfer-fields input, .transfer-fields select').forEach(input => {
         input.value = '';
@@ -473,22 +430,22 @@ function processTransfer() {
         showAlert('⚠️ Please select a transfer type', 'warning', 4000);
         return;
     }
-
+    
     const amount = document.getElementById('transferAmount').value;
-
+    
     if (!amount || parseFloat(amount) <= 0) {
         showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
         return;
     }
-
+    
     let recipient = '';
     let accountNumber = '';
-
+    
     // Validate based on transfer type
     if (selectedTransferType === 'bank') {
         const bankName = document.getElementById('bankName').value;
         accountNumber = document.getElementById('bankAccountNumber').value;
-
+        
         if (!bankName) {
             showAlert('⚠️ Please select a bank', 'warning', 4000);
             return;
@@ -498,11 +455,11 @@ function processTransfer() {
             return;
         }
         recipient = `${bankName} - ${accountNumber}`;
-
+        
     } else if (selectedTransferType === 'momo') {
         const network = document.getElementById('momoNetwork').value;
         const phone = document.getElementById('momoPhone').value;
-
+        
         if (!network) {
             showAlert('⚠️ Please select a network', 'warning', 4000);
             return;
@@ -512,31 +469,31 @@ function processTransfer() {
             return;
         }
         recipient = `${network} - ${phone}`;
-
+        
     } else if (selectedTransferType === 'p2p') {
         const username = document.getElementById('p2pUsername').value;
-
+        
         if (!username) {
             showAlert('⚠️ Please enter plutiply username', 'warning', 4000);
             return;
         }
         recipient = username;
     }
-
-
+    
+    
     // Show cedi loader
     showCediLoader();
-
+    
     // Close transfer modal
     closeTransferModal();
-
+    
     // Simulate transfer processing
     setTimeout(() => {
         hideCediLoader();
-
+        
         // Here you would make API call to backend
         showAlert(`✅ Transfer of ₵${amount} to ${recipient} initiated successfully!`, 'success', 5000);
-
+        
         // Add notification
         notifications.unshift({
             id: Date.now(),
@@ -552,23 +509,23 @@ function processTransfer() {
 }
 
 // Add input listeners for beneficiary name lookup (placeholder for API)
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Bank account lookup
     const bankAccountInput = document.getElementById('bankAccountNumber');
     const bankNameInput = document.getElementById('bankAccountName');
-
+    
     if (bankAccountInput && bankNameInput) {
-        bankAccountInput.addEventListener('input', function () {
+        bankAccountInput.addEventListener('input', function() {
             const value = this.value.trim();
-
+            
             if (!value) {
                 bankNameInput.value = '';
                 return;
             }
-
+            
             if (value.length >= 10) {
                 bankNameInput.value = 'Looking up...';
-
+                
                 setTimeout(() => {
                     // TODO: Replace with actual API call
                     // Example: fetchBankAccountName(value).then(name => bankNameInput.value = name);
@@ -577,23 +534,23 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
+    
     // Mobile Money lookup
     const momoPhoneInput = document.getElementById('momoPhone');
     const momoNameInput = document.getElementById('momoAccountName');
-
+    
     if (momoPhoneInput && momoNameInput) {
-        momoPhoneInput.addEventListener('input', function () {
+        momoPhoneInput.addEventListener('input', function() {
             const value = this.value.trim();
-
+            
             if (!value) {
                 momoNameInput.value = '';
                 return;
             }
-
+            
             if (value.length >= 10) {
                 momoNameInput.value = 'Looking up...';
-
+                
                 setTimeout(() => {
                     // TODO: Replace with actual API call
                     // Example: fetchMoMoAccountName(value).then(name => momoNameInput.value = name);
@@ -602,23 +559,23 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-
+    
     // P2P User lookup
     const p2pUsernameInput = document.getElementById('p2pUsername');
     const p2pNameInput = document.getElementById('p2pRecipientName');
-
+    
     if (p2pUsernameInput && p2pNameInput) {
-        p2pUsernameInput.addEventListener('input', function () {
+        p2pUsernameInput.addEventListener('input', function() {
             const value = this.value.trim();
-
+            
             if (!value) {
                 p2pNameInput.value = '';
                 return;
             }
-
+            
             if (value.length >= 3) {
                 p2pNameInput.value = 'Looking up...';
-
+                
                 setTimeout(() => {
                     // TODO: Replace with actual API call
                     // Example: fetchPlutliplyUser(value).then(name => p2pNameInput.value = name);
@@ -664,7 +621,7 @@ function processAirtime() {
     const network = document.getElementById('airtimeNetwork').value;
     const phone = document.getElementById('airtimePhone').value;
     const amount = document.getElementById('airtimeAmount').value;
-
+    
     if (!network) {
         showAlert('⚠️ Please select a network', 'warning', 4000);
         return;
@@ -677,14 +634,14 @@ function processAirtime() {
         showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
         return;
     }
-
+    
     closeAirtimeModal();
     showCediLoader();
-
+    
     setTimeout(() => {
         hideCediLoader();
         showAlert(`✅ Airtime purchase of ₵${amount} for ${phone} successful!`, 'success', 5000);
-
+        
         // Add notification
         notifications.unshift({
             id: Date.now(),
@@ -718,7 +675,7 @@ function processData() {
     const network = document.getElementById('dataNetwork').value;
     const phone = document.getElementById('dataPhone').value;
     const bundle = document.getElementById('dataBundle').value;
-
+    
     if (!network) {
         showAlert('⚠️ Please select a network', 'warning', 4000);
         return;
@@ -731,15 +688,15 @@ function processData() {
         showAlert('⚠️ Please select a data bundle', 'warning', 4000);
         return;
     }
-
+    
     closeDataModal();
     showCediLoader();
-
+    
     setTimeout(() => {
         hideCediLoader();
         const bundleText = document.getElementById('dataBundle').selectedOptions[0].text;
         showAlert(`✅ Data bundle ${bundleText} for ${phone} successful!`, 'success', 5000);
-
+        
         // Add notification
         notifications.unshift({
             id: Date.now(),
@@ -781,19 +738,19 @@ function updateBillFields() {
     const providerLabel = document.getElementById('providerLabel');
     const accountLabel = document.getElementById('accountLabel');
     const providerSelect = document.getElementById('billProvider');
-
+    
     if (!billType) {
         providerField.style.display = 'none';
         accountField.style.display = 'none';
         amountField.style.display = 'none';
         return;
     }
-
+    
     // Show all fields
     providerField.style.display = 'block';
     accountField.style.display = 'block';
     amountField.style.display = 'block';
-
+    
     // Update labels and options based on bill type
     if (billType === 'electricity') {
         providerLabel.textContent = 'Electricity Company';
@@ -827,7 +784,7 @@ function processBill() {
     const provider = document.getElementById('billProvider').value;
     const account = document.getElementById('billAccount').value;
     const amount = document.getElementById('billAmount').value;
-
+    
     if (!billType) {
         showAlert('⚠️ Please select bill type', 'warning', 4000);
         return;
@@ -844,15 +801,15 @@ function processBill() {
         showAlert('⚠️ Please enter a valid amount', 'warning', 4000);
         return;
     }
-
+    
     closeBillsModal();
     showCediLoader();
-
+    
     setTimeout(() => {
         hideCediLoader();
         const billTypeText = billType.charAt(0).toUpperCase() + billType.slice(1);
         showAlert(`✅ ${billTypeText} bill payment of ₵${amount} successful!`, 'success', 5000);
-
+        
         // Add notification
         notifications.unshift({
             id: Date.now(),
