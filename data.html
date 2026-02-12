@@ -53,7 +53,7 @@
                         <span class="icon">🏠</span>
                         <span class="text">Dashboard</span>
                     </a>
-                    <a href="mywallet.html" class="menu-item active">
+                    <a href="mywallet.html" class="menu-item">
                         <span class="icon">💰</span>
                         <span class="text">My Wallet</span>
                     </a>
@@ -61,7 +61,7 @@
                         <span class="icon">📱</span>
                         <span class="text">Buy Airtime</span>
                     </a>
-                    <a href="data.html" class="menu-item">
+                    <a href="data.html" class="menu-item active">
                         <span class="icon">📊</span>
                         <span class="text">Buy Data</span>
                     </a>
@@ -110,7 +110,7 @@
             <!-- Logout Section -->
             <div class="menu-section">
                 <h3>Account</h3>
-                <a href="index.html" class="menu-item">
+                <a href="main.html" class="menu-item">
                     <span class="icon">🚪</span>
                     <span class="text">Log Out</span>
                 </a>
@@ -167,21 +167,29 @@
                  ======================================== -->
             <section class="network-section">
                 <h3 class="section-title">Select Network</h3>
-                <div class="network-grid">
-                    <div class="network-card" onclick="selectNetwork('MTN')" role="button" tabindex="0">
-                        <div class="network-logo">📱</div>
+                <div class="network-grid" id="networkGrid">
+                    <div class="network-card" data-network="MTN" tabindex="0" role="button">
+                        <div class="network-logo">
+                            <img src="mtn.jpg" alt="MTN Logo">
+                        </div>
                         <div class="network-name">MTN</div>
                     </div>
-                    <div class="network-card" onclick="selectNetwork('AirtelTigo')" role="button" tabindex="0">
-                        <div class="network-logo">📶</div>
+                    <div class="network-card" data-network="AirtelTigo" tabindex="0" role="button">
+                        <div class="network-logo">
+                            <img src="atlogo.png" alt="AirtelTigo Logo">
+                        </div>
                         <div class="network-name">AirtelTigo</div>
                     </div>
-                    <div class="network-card" onclick="selectNetwork('Glo')" role="button" tabindex="0">
-                        <div class="network-logo">🌐</div>
+                    <div class="network-card" data-network="Glo" tabindex="0" role="button">
+                        <div class="network-logo">
+                            <img src="glo.png" alt="Glo Logo">
+                        </div>
                         <div class="network-name">Glo</div>
                     </div>
-                    <div class="network-card" onclick="selectNetwork('Telecel')" role="button" tabindex="0">
-                        <div class="network-logo">📡</div>
+                    <div class="network-card" data-network="Telecel" tabindex="0" role="button">
+                        <div class="network-logo">
+                            <img src="telecel.png" alt="Telecel Logo">
+                        </div>
                         <div class="network-name">Telecel</div>
                     </div>
                 </div>
@@ -323,5 +331,4 @@
     <script src="data.js"></script>
 
 </body>
-
 </html>
