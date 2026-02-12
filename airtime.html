@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plutiply - Buy Airtime</title>
     <link rel="stylesheet" href="airtimes.css">
 </head>
-
 <body>
 
     <div class="loader-overlay" id="loader">
-        <div class="loader-circle-50"></div>
+    <div class="loader-circle-50"></div>
     </div>
     <div class="dashboard">
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -28,7 +26,7 @@
                         <span class="icon">🏠</span>
                         <span class="text">Dashboard</span>
                     </a>
-                    <a href="mywallet.html" class="menu-item">
+                    <a href="WALLET/mywallet.html" class="menu-item">
                         <span class="icon">💰</span>
                         <span class="text">My Wallet</span>
                     </a>
@@ -46,7 +44,7 @@
                     </a>
                     <a href="#" class="menu-item">
                         <span class="icon">⚡</span>
-                        <span class="text">Utilities</span>
+                        <span class="text">Electricity</span>
                     </a>
                     <a href="#" class="menu-item">
                         <span class="icon">🎓</span>
@@ -69,25 +67,25 @@
                         <span class="icon">⚙️</span>
                         <span class="text">Settings</span>
                     </a>
-
+                    
                 </div>
             </nav>
 
             <div class="user-profile">
-                <div class="user-avatar" id="sidebarAvatar">SO</div>
+                <div class="user-avatar">SO</div>
                 <div class="user-info">
-                    <h4 id="sidebarUsername">Loading...</h4>
+                    <h4>Stanley Owusu</h4>
                     <p>User</p>
                 </div>
             </div>
             <div class="menu-section">
-                <h3>Log-Out</h3>
-                <a href="index.html" class="menu-item">
-                    <span>🚪</span>
-                    <span>Log-Out</span>
-                </a>
+                            <h3>Log-Out</h3>
+                            <a href="main.html" class="menu-item">
+                                <span>🚪</span>
+                                <span>Log-Out</span>
+                            </a>
 
-            </div>
+                        </div>
 
         </aside>
 
@@ -108,7 +106,7 @@
                 <div class="header-actions">
                     <button class="icon-btn notification-btn">🔔</button>
                 </div>
-
+                
                 <div class="header-actions">
                     <!-- Empty - for layout balance -->
                 </div>
@@ -147,19 +145,27 @@
                 <h3 class="section-title">Select Network</h3>
                 <div class="network-grid" id="networkGrid">
                     <div class="network-card" data-network="MTN" tabindex="0" role="button">
-                        <div class="network-logo">📱</div>
+                        <div class="network-logo">
+                            <img src="mtn.jpg" alt="MTN Logo">
+                        </div>
                         <div class="network-name">MTN</div>
                     </div>
                     <div class="network-card" data-network="AirtelTigo" tabindex="0" role="button">
-                        <div class="network-logo">📶</div>
+                        <div class="network-logo">
+                            <img src="atlogo.png" alt="AirtelTigo Logo">
+                        </div>
                         <div class="network-name">AirtelTigo</div>
                     </div>
                     <div class="network-card" data-network="Glo" tabindex="0" role="button">
-                        <div class="network-logo">🌍</div>
+                        <div class="network-logo">
+                            <img src="glo.png" alt="Glo Logo">
+                        </div>
                         <div class="network-name">Glo</div>
                     </div>
                     <div class="network-card" data-network="Telecel" tabindex="0" role="button">
-                        <div class="network-logo">📡</div>
+                        <div class="network-logo">
+                            <img src="telecel.png" alt="Telecel Logo">
+                        </div>
                         <div class="network-name">Telecel</div>
                     </div>
                 </div>
@@ -168,21 +174,20 @@
             <!-- Purchase Form -->
             <div class="purchase-form">
                 <h3 class="section-title">Purchase Details</h3>
-
+                
                 <!-- Single Mode Fields -->
                 <div id="singleModeFields">
                     <div class="form-group">
                         <label>Phone Number</label>
                         <input type="tel" id="phoneNumber" placeholder="e.g., 0241234567" maxlength="10">
-                        <span class="error-message" id="phoneError">Please enter a valid 10-digit phone number starting
-                            with 0</span>
+                        <span class="error-message" id="phoneError">Please enter a valid 10-digit phone number starting with 0</span>
                     </div>
 
                     <div class="form-group">
                         <label>Amount (₵)</label>
                         <input type="number" id="amount" placeholder="Enter amount" min="1" step="1">
                         <span class="error-message" id="amountError">Please enter a valid amount</span>
-
+                        
                         <div class="quick-amounts" id="quickAmounts">
                             <button class="amount-btn" data-amount="5">₵5</button>
                             <button class="amount-btn" data-amount="10">₵10</button>
@@ -196,21 +201,6 @@
 
                 <!-- Bulk Mode Fields -->
                 <div id="bulkModeFields" class="recipients-container">
-                    <div class="form-group">
-                        <label>Amount per recipient (₵)</label>
-                        <input type="number" id="bulkAmount" placeholder="Enter amount for all recipients" min="1" step="1">
-                        <span class="error-message" id="bulkAmountError">Please enter a valid amount</span>
-                        
-                        <div class="quick-amounts">
-                            <button class="amount-btn bulk-amount-btn" data-amount="5">₵5</button>
-                            <button class="amount-btn bulk-amount-btn" data-amount="10">₵10</button>
-                            <button class="amount-btn bulk-amount-btn" data-amount="20">₵20</button>
-                            <button class="amount-btn bulk-amount-btn" data-amount="50">₵50</button>
-                            <button class="amount-btn bulk-amount-btn" data-amount="100">₵100</button>
-                            <button class="amount-btn bulk-amount-btn" data-amount="200">₵200</button>
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label>Recipients</label>
                         <div id="recipientsList">
@@ -267,7 +257,7 @@
             <div class="success-icon">✅</div>
             <h2 id="successTitle">Purchase Successful!</h2>
             <p id="successMessage">Your airtime has been successfully delivered</p>
-
+            
             <!-- Single Purchase Details -->
             <div class="success-details" id="singleSuccessDetails">
                 <div class="detail-row">
@@ -291,12 +281,10 @@
             <!-- Bulk Purchase Details -->
             <div class="bulk-success-list" id="bulkSuccessDetails" style="display: none;">
             </div>
-
+            
             <button class="close-modal-btn" id="closeSuccessBtn">Done</button>
         </div>
     </div>
     <script src="airtime.js"></script>
 </body>
-
-
 </html>
