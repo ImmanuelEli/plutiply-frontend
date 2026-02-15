@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plutiply - Buy Exam Vouchers</title>
+    <link rel="stylesheet" href="exam.css">
+</head>
+<body>
+
+    <div class="loader-overlay" id="loader">
+        <div class="loader-circle-50"></div>
+    </div>
+    
+    <div class="dashboard">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Notification Button - Fixed at top right -->
+        <button class="icon-btn notification-btn" id="notificationBtn" onclick="toggleNotifications()">🔔</button>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="logo-section">
+                <h2>Plutiply</h2>
+                <p>Your Reliable Digital Transaction Partner</p>
+            </div>
+
+            <nav>
+                <div class="menu-section">
+                    <a href="dashboard.html" class="menu-item">
+                        <span class="icon">🏠</span>
+                        <span class="text">Dashboard</span>
+                    </a>
+                    <a href="mywallet.html" class="menu-item">
+                        <span class="icon">💰</span>
+                        <span class="text">My Wallet</span>
+                    </a>
+                    <a href="airtime.html" class="menu-item">
+                        <span class="icon">📱</span>
+                        <span class="text">Buy Airtime</span>
+                    </a>
+                    <a href="data.html" class="menu-item">
+                        <span class="icon">📊</span>
+                        <span class="text">Buy Data</span>
+                    </a>
+                    <a href="cable.html" class="menu-item">
+                        <span class="icon">📺</span>
+                        <span class="text">Cable TV</span>
+                    </a>
+                    <a href="utilities.html" class="menu-item">
+                        <span class="icon">⚡</span>
+                        <span class="text">Electricity</span>
+                    </a>
+                    <a href="exam.html" class="menu-item active">
+                        <span class="icon">🎓</span>
+                        <span class="text">Exam Vouchers</span>
+                    </a>
+                    <a href="referrals.html" class="menu-item">
+                        <span class="icon">🎁</span>
+                        <span class="text">Referrals</span>
+                    </a>
+                </div>
+
+                <div class="menu-section">
+                    <h3>Support</h3>
+                    <a href="support.html" class="menu-item">
+                        <span class="icon">💬</span>
+                        <span class="text">Support</span>
+                    </a>
+                    <a href="settings.html" class="menu-item">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Settings</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="user-profile">
+                <div class="user-avatar">SO</div>
+                <div class="user-info">
+                    <h4>Stanley Owusu</h4>
+                    <p>User</p>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <h3>Log-Out</h3>
+                <a href="main.html" class="menu-item">
+                    <span>🚪</span>
+                    <span>Log-Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-actions">
+                    <button class="hamburger" id="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <div class="page-title">
+                    <h1>Exam Vouchers</h1>
+                    <p>Purchase BECE & WASSCE exam vouchers</p>
+                </div>
+                
+                <div class="header-actions">
+                    <!-- Empty - for layout balance -->
+                </div>
+            </header>
+
+            <!-- Alert Container -->
+            <div class="alert-container" id="alertContainer">
+                <!-- Alerts will be dynamically inserted here -->
+            </div>
+
+            <!-- Wallet Balance Banner -->
+            <div class="balance-banner">
+                <div class="balance-info">
+                    <h3>Wallet Balance</h3>
+                    <div class="balance-amount">
+                        <span id="walletBalance">₵0.00</span>
+                        <button class="toggle-balance" onclick="toggleBalance()">👁️</button>
+                    </div>
+                </div>
+                <button class="fund-wallet-btn" id="fundWalletBtn">Fund Wallet</button>
+            </div>
+
+            <!-- Exam Type Selection -->
+            <div class="exam-section" id="examSection">
+                <h3 class="section-title">Select Exam Type</h3>
+                <div class="exam-grid" id="examGrid">
+                    <div class="exam-card" data-exam="BECE" tabindex="0" role="button">
+                        <div class="exam-icon">
+                            <span>📝</span>
+                        </div>
+                        <div class="exam-info">
+                            <div class="exam-name">BECE</div>
+                            <div class="exam-description">Basic Education Certificate Examination</div>
+                            <div class="exam-price">₵0.00 per voucher</div>
+                        </div>
+                    </div>
+                    
+                    <div class="exam-card" data-exam="WASSCE" tabindex="0" role="button">
+                        <div class="exam-icon">
+                            <span>🎓</span>
+                        </div>
+                        <div class="exam-info">
+                            <div class="exam-name">WASSCE</div>
+                            <div class="exam-description">West African Senior School Certificate Examination</div>
+                            <div class="exam-price">₵0.00 per voucher</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchase Form -->
+            <div class="purchase-form">
+                <h3 class="section-title">Purchase Details</h3>
+                
+                <div class="form-group">
+                    <label>Recipient Mobile Number</label>
+                    <input type="tel" id="recipientMobile" placeholder="e.g., 0244123456">
+                    <span class="error-message" id="mobileError">Please enter recipient mobile number</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="quantity" placeholder="Enter quantity" min="1" value="1" step="1">
+                    <span class="error-message" id="quantityError">Please enter a valid quantity</span>
+                </div>
+
+                <!-- Purchase Summary -->
+                <div class="summary-card">
+                    <h4 style="margin-bottom: 15px; color: #4CAF50;">Purchase Summary</h4>
+                    <div class="summary-item" id="summaryExamRow">
+                        <span class="summary-label">Exam Type:</span>
+                        <span class="summary-value" id="summaryExam">Not selected</span>
+                    </div>
+                    <div class="summary-item" id="summaryMobileRow">
+                        <span class="summary-label">Mobile Number:</span>
+                        <span class="summary-value" id="summaryMobile">-</span>
+                    </div>
+                    <div class="summary-item" id="summaryQuantityRow">
+                        <span class="summary-label">Quantity:</span>
+                        <span class="summary-value" id="summaryQuantity">0</span>
+                    </div>
+                    
+                    <div class="summary-item total">
+                        <span>Total:</span>
+                        <span id="summaryTotal">₵0.00</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="submit-btn" id="purchaseBtn">Purchase Voucher</button>
+                    <button class="clear-btn" id="clearBtn" type="button">Clear Form</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader"></div>
+        <div class="loading-text">Processing your purchase...</div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2 id="successTitle">Purchase Successful!</h2>
+            <p id="successMessage">Your exam voucher has been successfully generated</p>
+            
+            <!-- Single Purchase Details -->
+            <div class="success-details" id="singleSuccessDetails">
+                <div class="detail-row">
+                    <span>Exam Type:</span>
+                    <strong id="successExam">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Mobile Number:</span>
+                    <strong id="successMobile">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Quantity:</span>
+                    <strong id="successQuantity">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Amount:</span>
+                    <strong id="successAmount">-</strong>
+                </div>
+                <div class="detail-row">
+                    <span>Transaction ID:</span>
+                    <strong id="successTxId">-</strong>
+                </div>
+            </div>
+
+            <!-- Bulk Purchase Details -->
+            <div class="bulk-success-list" id="bulkSuccessDetails" style="display: none;">
+            </div>
+            
+            <button class="close-modal-btn" id="closeSuccessBtn">Done</button>
+        </div>
+    </div>
+    
+    <script src="exam.js"></script>
+</body>
+</html>
